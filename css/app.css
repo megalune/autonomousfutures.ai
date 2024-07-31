@@ -1,0 +1,40 @@
+* {
+	font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+.gt_float_switcher img {
+	display: none !important;
+}
+img.logo {
+	max-width: 50px;
+}
+img {
+	/* max-height: 75vh; */
+}
+figure.video,
+video {
+	max-width: 100%;
+}
+header,
+footer {
+	padding: 1rem 0;
+}
+code {
+	font-size: 2.5rem;
+	background-color: greenyellow;
+}
+img.rounded {
+	border-radius: 999px;
+}
+img.border,
+img.rounded {
+	border: double 5px #ddd;
+}
+header,
+footer {
+	background-color: #000;
+	color: #fff;
+}
+.grid-container {
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}
