@@ -19,6 +19,7 @@
 			<div class="large-8 medium-8 small-8 cell">
 				<div>
 					<ul class="dropdown menu align-right" data-dropdown-menu>
+						<li><a href="index.html">Manifesto</a></li>
 						<li><a href="texts.html">Texts</a></li>
 						<li><a href="discourse.html">Discourse</a></li>
 						<li><a href="calendar.html">Get Involved</a></li>
@@ -36,14 +37,6 @@
 					<p>list page; filter by topic/theme/etc...</p>
 					<!-- wp:list -->
 					<ul>
-						<li>
-							Reading list (synopsis, why it’s important, themes/keywords, connections) { <a href="https://www.google.com/url?q=https://docs.google.com/presentation/d/1qjQLOUM4cidvNyVgUHSpfd8A2boEyh5HP7XK60JeVy8/edit%23slide%3Did.g2ca03ab2445_1_466&amp;sa=D&amp;source=editors&amp;ust=1722435708998999&amp;usg=AOvVaw0qPa9TdCOFpXFgO3r4ZvYd">slide 10</a>}
-							<ul>
-								<li>Maybe this has affiliate links to purchase texts that you get a percentage of, funds can be used for lobbying or something?</li>
-								<li>Probably start the database in something simple and scalable like <a href="https://www.google.com/url?q=https://airtable.com/&amp;sa=D&amp;source=editors&amp;ust=1722435708999304&amp;usg=AOvVaw1zwN9tQndJUCaMngUGlEnw">AirTable</a>; can change it up later depending on need</li>
-								<li><a href="https://www.google.com/url?q=https://www.notion.so/&amp;sa=D&amp;source=editors&amp;ust=1722435708999503&amp;usg=AOvVaw3z1oPbu4RA6AbVKoEqHrMb">Notion</a> is free to cheap to use. A great substitute to Airtable which can be costly with many seats.</li>
-							</ul>
-						</li>
 						<li>Establish a democratic, publicly accessible archive</li>
 						<li>Way to recommend texts; review and approval process — form</li>
 						<li>
@@ -51,15 +44,66 @@
 						</li>
 					</ul>
 					<hr />
-					<h3>airtable example</h3>
-					<p>Visualizations of connections;</p>
-					<ul>
-						<li>
-							Ex: <a href="https://www.google.com/url?q=https://observablehq.com/@d3/sunburst/2?intent%3Dfork&amp;sa=D&amp;source=editors&amp;ust=1722435708999914&amp;usg=AOvVaw1myzQZs1gRkMvOaXCBEdix">sunburst</a>, <a href="https://www.google.com/url?q=https://observablehq.com/@nitaku/tangled-tree-visualization-ii&amp;sa=D&amp;source=editors&amp;ust=1722435709000085&amp;usg=AOvVaw2nCziagcEJdlgFiku61AfE">tangled tree</a>, <a href="https://www.google.com/url?q=https://observablehq.com/@d3/radial-tree/2?intent%3Dfork&amp;sa=D&amp;source=editors&amp;ust=1722435709000234&amp;usg=AOvVaw0B5hWFO6S0TxIgneB1aeia">radial tree</a>, <a href="https://www.google.com/url?q=https://observablehq.com/@d3/chord-diagram?intent%3Dfork&amp;sa=D&amp;source=editors&amp;ust=1722435709000385&amp;usg=AOvVaw3VKXRdTvTfMeFVR9QFYlUG">chord</a>,
-							<a href="https://www.google.com/url?q=https://observablehq.com/@d3/mobile-patent-suits?intent%3Dfork&amp;sa=D&amp;source=editors&amp;ust=1722435709000550&amp;usg=AOvVaw2v5YVtpDgN0TjFfUdpPahN">arrow map</a>, <a href="https://flourish.studio/visualisations/network-charts/">network chart</a>
-						</li>
-					</ul>
+					<h3>examples</h3>
 					<iframe class="airtable-embed" src="https://airtable.com/embed/app0d64cnbWfBPxxh/shrdlOQKIiqEZwduI?viewControls=on" frameborder="0" onmousewheel="" width="100%" height="533" style="background: transparent; border: 1px solid #ccc"></iframe>
+					<h3>sunburst</h3>
+					<div id="observablehq-chart-7c27e01b"></div>
+					<p>Credit: <a href="https://observablehq.com/@d3/sunburst/2">Sunburst by D3</a></p>
+
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
+					<script type="module">
+						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+						import define from "https://api.observablehq.com/@d3/sunburst/2.js?v=4";
+						new Runtime().module(define, (name) => {
+							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-7c27e01b"));
+						});
+					</script>
+					<h3>tangled tree</h3>
+					<div id="observablehq-f230b822"></div>
+					<p>Credit: <a href="https://observablehq.com/@nitaku/tangled-tree-visualization-ii">Tangled tree visualization by Matteo Abrate</a></p>
+
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
+					<script type="module">
+						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+						import define from "https://api.observablehq.com/@nitaku/tangled-tree-visualization-ii.js?v=4";
+						new Runtime().module(define, Inspector.into("#observablehq-f230b822"));
+					</script>
+					<h3>radial tree</h3>
+					<div id="observablehq-chart-54b0e6e7"></div>
+					<p>Credit: <a href="https://observablehq.com/@d3/radial-tree/2">Radial tidy tree by D3</a></p>
+
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
+					<script type="module">
+						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+						import define from "https://api.observablehq.com/@d3/radial-tree/2.js?v=4";
+						new Runtime().module(define, (name) => {
+							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-54b0e6e7"));
+						});
+					</script>
+					<h3>chord</h3>
+					<div id="observablehq-chart-b7e89d09"></div>
+					<p>Credit: <a href="https://observablehq.com/@d3/chord-diagram">Chord diagram by D3</a></p>
+
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
+					<script type="module">
+						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+						import define from "https://api.observablehq.com/@d3/chord-diagram.js?v=4";
+						new Runtime().module(define, (name) => {
+							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-b7e89d09"));
+						});
+					</script>
+					<h3>arrow map</h3>
+					<div id="observablehq-chart-6c02245f"></div>
+					<p>Credit: <a href="https://observablehq.com/@d3/mobile-patent-suits">Mobile patent suits by D3</a></p>
+
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
+					<script type="module">
+						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+						import define from "https://api.observablehq.com/@d3/mobile-patent-suits.js?v=4";
+						new Runtime().module(define, (name) => {
+							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-6c02245f"));
+						});
+					</script>
 				</div>
 			</div>
 			<!--  -->
