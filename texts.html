@@ -20,7 +20,9 @@
 				<div>
 					<ul class="dropdown menu align-right" data-dropdown-menu>
 						<li><a href="index.html">Manifesto</a></li>
+						<li><a href="themes.html">Themes</a></li>
 						<li><a href="texts.html">Texts</a></li>
+						<li><a href="dr.html">Design Recommendations</a></li>
 						<li><a href="discourse.html">Discourse</a></li>
 						<li><a href="calendar.html">Get Involved</a></li>
 						<li><a href="timeline.html">Timeline</a></li>
@@ -34,7 +36,6 @@
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
 					<h1>Texts</h1>
-					<p>list page; filter by topic/theme/etc...</p>
 					<!-- wp:list -->
 					<ul>
 						<li>Establish a democratic, publicly accessible archive</li>
@@ -43,67 +44,55 @@
 							<strong><u>Common Themes + Vignettes (Analysis)</u></strong>
 						</li>
 					</ul>
+					<p>list page; filter by topic/theme/etc...</p>
+					<div class="grid-x grid-margin-x">
+						<div class="cell auto">
+							<!-- do ordering not as a fetch --><select>
+								<option selected>genre</option>
+								<option>abcd...</option>
+								<option>abcd...</option>
+								<option>abcd...</option>
+							</select>
+						</div>
+						<div class="cell auto">
+							<!-- get project data? --><select id="dino-select">
+								<option selected>format</option>
+								<option>abcd...</option>
+								<option>abcd...</option>
+								<option>abcd...</option>
+							</select>
+						</div>
+						<div class="cell auto">
+							<!-- get project data? --><select id="dino-select">
+								<option selected>theme</option>
+								<option>abcd...</option>
+								<option>abcd...</option>
+								<option>abcd...</option>
+							</select>
+						</div>
+					</div>
+					<div class="callout secondary">
+						<article class="grid-x grid-padding-x">
+							<div class="small-4 cell"><img src="https://picsum.photos/400/800" /></div>
+							<div class="small-8 cell">
+								<h5>Title</h5>
+								<p>author, country, date, genre, format, themes...</p>
+								<p>
+									Essun/Syanite/Damaya, the main character in science fiction author N.K. Jemison’s Broken Earth trilogy, is an orogene, or a human who has an additional nerve (sessapinae) in the back of her neck that enables her to feel and control seismic events. Orogenes are sensitive to the movements of the earth but unlike the feared and non-human stone eaters, they do not possess the ability to travel within and through the earth’s crust. Because humans fear the power of orogenes they have devised a tiered social system of control. The Fulcrum is a government entity that oversees orogene training. Some orogenes are born within the Fulcrum when top-ranking orogenes are required to breed. Other orogenes are brought to the Fulcrum when they are born elsewhere. Since they are a discriminate against population, their families usually either turn them in to the Fulcrum or murder them. Orogenes undergo extensive training under the supervision of Guardians at the
+									Fulcrum until they are ready to travel outside of the Fulcrum to complete missions. If an orogene cannot be trained or repeatedly commits violations, their sessapinae is removed, they are stripped of their ability for self-control, and they are sedated and placed in a tower where their seismic energy is used.
+								</p>
+								<p>What illustrates this theme: Orogenes like Essun possess an additional nerve (sessapinae) in the back of their necks that enable them to feel and control seismic events. Stone eaters like Hoa are centuries-old non-humans constructed for the purpose of building obelisks that are responsible for destroying the Earth’s moon. Orogenes and stone eaters are feared by non-orogene humans (stills) and orogenes are exploited rather than appreciated for their unique, live-saving skills.</p>
+								<p>Why this is important inside the text: Orogenes and stone eaters both represent the collapse of boundaries between human and nature. Through their sessapinae, orogenes are able to sense seismic activity in addition to the other five human senses. As their name implies, stone eaters consume the earth but they can also travel through it and communicate telepathically with one another. They are man-made beings for whom death is almost impossible and so they also challenge the boundaries between human, nature, and machine.</p>
+								<p>Recommendations</p>
+							</div>
+						</article>
+					</div>
+					<p>repeats...</p>
+
 					<hr />
-					<h3>examples</h3>
+					<hr />
+					<h2>backend / database (not visible)</h2>
 					<iframe class="airtable-embed" src="https://airtable.com/embed/app0d64cnbWfBPxxh/shrdlOQKIiqEZwduI?viewControls=on" frameborder="0" onmousewheel="" width="100%" height="533" style="background: transparent; border: 1px solid #ccc"></iframe>
-					<h3>sunburst</h3>
-					<div id="observablehq-chart-7c27e01b"></div>
-					<p>Credit: <a href="https://observablehq.com/@d3/sunburst/2">Sunburst by D3</a></p>
-
-					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
-					<script type="module">
-						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-						import define from "https://api.observablehq.com/@d3/sunburst/2.js?v=4";
-						new Runtime().module(define, (name) => {
-							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-7c27e01b"));
-						});
-					</script>
-					<h3>tangled tree</h3>
-					<div id="observablehq-f230b822"></div>
-					<p>Credit: <a href="https://observablehq.com/@nitaku/tangled-tree-visualization-ii">Tangled tree visualization by Matteo Abrate</a></p>
-
-					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
-					<script type="module">
-						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-						import define from "https://api.observablehq.com/@nitaku/tangled-tree-visualization-ii.js?v=4";
-						new Runtime().module(define, Inspector.into("#observablehq-f230b822"));
-					</script>
-					<h3>radial tree</h3>
-					<div id="observablehq-chart-54b0e6e7"></div>
-					<p>Credit: <a href="https://observablehq.com/@d3/radial-tree/2">Radial tidy tree by D3</a></p>
-
-					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
-					<script type="module">
-						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-						import define from "https://api.observablehq.com/@d3/radial-tree/2.js?v=4";
-						new Runtime().module(define, (name) => {
-							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-54b0e6e7"));
-						});
-					</script>
-					<h3>chord</h3>
-					<div id="observablehq-chart-b7e89d09"></div>
-					<p>Credit: <a href="https://observablehq.com/@d3/chord-diagram">Chord diagram by D3</a></p>
-
-					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
-					<script type="module">
-						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-						import define from "https://api.observablehq.com/@d3/chord-diagram.js?v=4";
-						new Runtime().module(define, (name) => {
-							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-b7e89d09"));
-						});
-					</script>
-					<h3>arrow map</h3>
-					<div id="observablehq-chart-6c02245f"></div>
-					<p>Credit: <a href="https://observablehq.com/@d3/mobile-patent-suits">Mobile patent suits by D3</a></p>
-
-					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css" />
-					<script type="module">
-						import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
-						import define from "https://api.observablehq.com/@d3/mobile-patent-suits.js?v=4";
-						new Runtime().module(define, (name) => {
-							if (name === "chart") return new Inspector(document.querySelector("#observablehq-chart-6c02245f"));
-						});
-					</script>
 				</div>
 			</div>
 			<!--  -->
