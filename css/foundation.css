@@ -3177,9 +3177,13 @@ h6,
 }
 a {
 	line-height: inherit;
+	color: #3fbe15;
+	cursor: pointer;
+}
+header a,
+footer a {
 	color: #41ff00;
 	text-decoration: none;
-	cursor: pointer;
 }
 a:hover,
 a:focus {
