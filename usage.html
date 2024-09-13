@@ -13,7 +13,7 @@
 		<header class="grid-x grid-padding-x grid-padding-y align-middle">
 			<div class="large-4 medium-4 small-4 cell">
 				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
+					<a href="index.html" rel="home">&#9744; Autonomous Futures</a>
 				</div>
 			</div>
 			<div class="large-8 medium-8 small-8 cell">
@@ -21,8 +21,10 @@
 					<ul class="dropdown menu align-right" data-dropdown-menu>
 						<li><a href="manifesto.html">Manifesto</a></li>
 						<li><a href="principles.html">Principles</a></li>
-						<li><a href="texts.html">Texts</a></li>
+						<li><a href="texts.html">Cultural Texts</a></li>
 						<li><a href="recommendations.html">Design Recommendations</a></li>
+						<li><a href="profiles.html">Profiles</a></li>
+						<li><a href="usage.html">Usage</a></li>
 					</ul>
 				</div>
 			</div>
@@ -32,34 +34,21 @@
 			<!--  -->
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
-					<h1>Legal Stuff</h1>
-					<p>???</p>
+					<h1 id="airtable_title">loading...</h1>
+					<section id="airtable_content"></section>
 				</div>
 			</div>
 			<!--  -->
 		</div>
-		<!--  -->
-		<footer class="grid-x grid-padding-x grid-padding-y align-middle" id="contact">
-			<div class="large-4 medium-4 small-4 cell">
-				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
-				</div>
-			</div>
-			<div class="large-8 medium-8 small-8 cell">
-				<div>
-					<ul class="menu align-right">
-						<ul class="dropdown menu align-right" data-dropdown-menu>
-							<li><a href="about.html">About</a></li>
-							<li><a href="legal.html">Legal Stuff</a></li>
-						</ul>
-					</ul>
-				</div>
-			</div>
-		</footer>
-
-		<script src="js/vendor/jquery.js"></script>
-		<script src="js/vendor/what-input.js"></script>
-		<script src="js/vendor/foundation.js"></script>
+		<!-- AirTable -->
+		<script src="js/airtable.browser.js"></script>
+		<script src="js/showdown.min.js"></script>
 		<script src="js/app.js"></script>
+		<script>
+			get_page_from_airtable("recK7EY86XddBOTzS");
+		</script>
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBH48TW4" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
 	</body>
 </html>

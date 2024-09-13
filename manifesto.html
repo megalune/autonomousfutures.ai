@@ -13,7 +13,7 @@
 		<header class="grid-x grid-padding-x grid-padding-y align-middle">
 			<div class="large-4 medium-4 small-4 cell">
 				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
+					<a href="index.html" rel="home">&#9744; Autonomous Futures</a>
 				</div>
 			</div>
 			<div class="large-8 medium-8 small-8 cell">
@@ -21,8 +21,10 @@
 					<ul class="dropdown menu align-right" data-dropdown-menu>
 						<li><a href="manifesto.html">Manifesto</a></li>
 						<li><a href="principles.html">Principles</a></li>
-						<li><a href="texts.html">Texts</a></li>
+						<li><a href="texts.html">Cultural Texts</a></li>
 						<li><a href="recommendations.html">Design Recommendations</a></li>
+						<li><a href="profiles.html">Profiles</a></li>
+						<li><a href="usage.html">Usage</a></li>
 					</ul>
 				</div>
 			</div>
@@ -32,52 +34,21 @@
 			<!--  -->
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
-					<h1>Manifesto</h1>
-
-					<p class="larger">Autonomous Futures re-imagines our relationship with emerging technologies and the suite of computational systems and tools broadly categorized as “ai.” We are convening a discursive community engaged in building a community around science fiction, literary, cultural, artistic, and critical primary sources that serve as inspirations for imaging a future where women and BIPOC individuals and communities are flourishing.</p>
-
-					<p class="larger">We reclaim the word “autonomous” away from contemporary discourse on <a href="https://mediatum.ub.tum.de/doc/1616746/document.pdf">autonomous systems</a> by re-centering the concept of autonomy within a genealogy of intersectional and black feminist critiques of the multiple, overlapping (“intersecting”) forms of oppression that threaten our opportunities for self-determination, autonomy, freedom, and collective liberation.</p>
-
-					<p class="larger">We envision a future where communities own, operate, and determine the appropriate application for ai to support our society.</p>
-
-					<p>
-						Tracing a genealogy of autonomy from enslavement and the fight for the rights of Black women who have been at the forefront of the struggle for freedom, we draw inspiration from discussions on autonomy from <a href="http://ereserve.library.utah.edu/Annual/SOC/7050/Stewart/mother.pdf">Patricia Hill Collins</a> and the <a href="https://americanstudies.yale.edu/sites/default/files/files/Keyword%20Coalition_Readings.pdf">Combahee River Collective</a> to Octavia Butler’s concepts of bodily autonomy examined through conditions like “hyperempathy” which can help us understand the problems of even the best outcomes proposed for advanced technologies, like the so-called “<a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.814565/full">empathy machine</a>” that artist Chris Milk calls Virtual Reality (and building on that concept, raised
-						<a href="https://variety.com/2017/digital/news/chris-milk-within-40-million-series-b-1202507040/">$40 Million for his ideas</a> evangelizing the concept).
-					</p>
-
-					<p>The autonomous futures imagined within the dominant discourse of ai during this current moment of rapid technological development – what industry insiders call “<a href="https://hai.stanford.edu/news/ai-spring-four-takeaways-major-releases-foundation-models">AI Spring</a>” – is one that invests in and pours billions of dollars into white male imaginaries of the future of technology that are sourced directly from science fiction that often exclude women and BIPOC communities. Or if we survive at all in those texts, let’s just say things don’t bode well for us.</p>
-
-					<p>The vision of emerging technologies as we know it today is also specifically shaped by white male science fiction and the white male gaze on technology. A homogenous subset of science fiction has long served as a source of inspiration for tech executives and technologists alike. Together, these texts along with <em>Star Trek</em>, <em>Blade Runner</em>, <em>The Matrix</em>, <em>Neuromancer</em>, and <em>Minority Report</em>, to name a few, form a familiar cadre of texts routinely credited with inspiring the creation of emerging technologies.</p>
-
-					<p>Star Trek has inspired a whole generation of technology, from tablets to optical visors. Palantir, the major government surveillance technology company, was named after the all-seeing rock in <em>Lord of the Rings</em>. Neal Stephenson’s Snow Crash has been such a source of inspiration that the VR company MagicLeap hired him as their “CHIEF FUTURIST” a decade ago. And of course, Mark Zuckerberg named Meta’s vision for the future of XR the metaverse, the name of a virtual world imagined by Neal Stephenson in <em>Snow Crash</em>. And, Meta’s Horizon Worlds delivers a multiplayer platform that comes straight out of <em>Ready Player One</em> wherein users are “teleported” between virtual worlds with graphics that signal Star Trek’s “transporter.”</p>
-
-					<p>By introducing the archive of texts that anchor this project we uplift the visionaries of technologies who, through their art, are envisioning what it means to exercise autonomy over ourselves and our communities against threats against that autonomy. We have an opportunity to tap into an even deeper well of imagination that center diverse, plural visions of the future from marginalized communities often excluded or rendered invisible in the story of technological innovation.We engage with Afrofuturist, Indigenous, Latinx, Gulf Futurism, and Sinofuturist artists by placing them at the center of conversations on autonomous futures, ai agents, and “intelligent” computational systems.</p>
+					<h1 id="airtable_title">loading...</h1>
+					<section id="airtable_content"></section>
 				</div>
 			</div>
 			<!--  -->
 		</div>
-		<!--  -->
-		<footer class="grid-x grid-padding-x grid-padding-y align-middle" id="contact">
-			<div class="large-4 medium-4 small-4 cell">
-				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
-				</div>
-			</div>
-			<div class="large-8 medium-8 small-8 cell">
-				<div>
-					<ul class="menu align-right">
-						<ul class="dropdown menu align-right" data-dropdown-menu>
-							<li><a href="about.html">About</a></li>
-							<li><a href="legal.html">Legal Stuff</a></li>
-						</ul>
-					</ul>
-				</div>
-			</div>
-		</footer>
-
-		<script src="js/vendor/jquery.js"></script>
-		<script src="js/vendor/what-input.js"></script>
-		<script src="js/vendor/foundation.js"></script>
+		<!-- AirTable -->
+		<script src="js/airtable.browser.js"></script>
+		<script src="js/showdown.min.js"></script>
 		<script src="js/app.js"></script>
+		<script>
+			get_page_from_airtable("recf8ETGHZIapBP0s");
+		</script>
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBH48TW4" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
 	</body>
 </html>

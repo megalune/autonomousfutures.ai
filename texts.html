@@ -13,7 +13,7 @@
 		<header class="grid-x grid-padding-x grid-padding-y align-middle">
 			<div class="large-4 medium-4 small-4 cell">
 				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
+					<a href="index.html" rel="home">&#9744; Autonomous Futures</a>
 				</div>
 			</div>
 			<div class="large-8 medium-8 small-8 cell">
@@ -21,8 +21,10 @@
 					<ul class="dropdown menu align-right" data-dropdown-menu>
 						<li><a href="manifesto.html">Manifesto</a></li>
 						<li><a href="principles.html">Principles</a></li>
-						<li><a href="texts.html">Texts</a></li>
+						<li><a href="texts.html">Cultural Texts</a></li>
 						<li><a href="recommendations.html">Design Recommendations</a></li>
+						<li><a href="profiles.html">Profiles</a></li>
+						<li><a href="usage.html">Usage</a></li>
 					</ul>
 				</div>
 			</div>
@@ -32,13 +34,13 @@
 			<!--  -->
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
-					<h1>Texts</h1>
+					<h1>Cultural Texts</h1>
 
 					<p>Pellentesque urna nisl, ornare eget est faucibus, commodo commodo sapien. Maecenas ac est finibus, placerat magna ultricies, commodo purus. Morbi faucibus aliquet magna eu fermentum. Nunc mi dui, accumsan sollicitudin vulputate a, lacinia aliquet arcu. Nulla sem tellus, aliquam vitae nulla vulputate, aliquam luctus lectus. Sed pellentesque et risus vel viverra. Etiam tincidunt dui dui, in pretium nisl dignissim at. Sed sit amet turpis eget ipsum dapibus accumsan. Aenean tempor dui in turpis viverra lacinia. Nulla pretium fringilla orci, nec finibus sapien aliquet ullamcorper. Nunc mauris nisi, accumsan eget laoreet at, varius eu nisl. Aliquam erat volutpat. Vestibulum mollis ex enim, non tincidunt arcu sagittis a. Mauris consectetur tincidunt diam et sollicitudin. Nulla ex metus, pharetra eu sollicitudin ac, tristique vel ligula.</p>
 
-					<div class="grid-x grid-margin-x">
+					<!-- <div class="grid-x grid-margin-x">
 						<div class="cell auto">
-							<!-- do ordering not as a fetch --><select>
+							<select>
 								<option selected>genre</option>
 								<option>abcd...</option>
 								<option>abcd...</option>
@@ -46,7 +48,7 @@
 							</select>
 						</div>
 						<div class="cell auto">
-							<!-- get project data? --><select id="dino-select">
+							<select id="dino-select">
 								<option selected>format</option>
 								<option>abcd...</option>
 								<option>abcd...</option>
@@ -54,15 +56,15 @@
 							</select>
 						</div>
 						<div class="cell auto">
-							<!-- get project data? --><select id="dino-select">
+							<select id="dino-select">
 								<option selected>theme</option>
 								<option>abcd...</option>
 								<option>abcd...</option>
 								<option>abcd...</option>
 							</select>
 						</div>
-					</div>
-					<div class="callout secondary">
+					</div> -->
+					<!-- <div class="callout">
 						<article class="grid-x grid-padding-x">
 							<div class="small-4 cell"><img src="https://picsum.photos/400/800" /></div>
 							<div class="small-8 cell">
@@ -78,34 +80,99 @@
 								<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
 							</div>
 						</article>
+					</div> -->
+
+					<script src="js/airtable.browser.js"></script>
+					<script>
+						// API: https://airtable.com/developers/web/api/introduction
+
+						// var Airtable = require("airtable");
+						// Airtable.configure({
+						// 	endpointUrl: "https://api.airtable.com",
+						// 	apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91",
+						// });
+						// var base = Airtable.base("appBKn1E7gk7Kakkj");
+
+						// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
+						var ALLRECORDS = [];
+						var Airtable = require("airtable");
+						var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
+
+						base("Cultural Texts")
+							.select({
+								// Selecting the first 3 records in Grid view:
+								// maxRecords: 3,
+								view: "Grid view",
+								filterByFormula: "{DisplayOnWeb} = TRUE()",
+							})
+							.eachPage(
+								function page(records, fetchNextPage) {
+									// This function (`page`) will get called for each page of records.
+
+									records.forEach(function (record) {
+										let mything = record.fields;
+										// console.log(mything);
+										ALLRECORDS = ALLRECORDS.concat(mything);
+										// console.log("Retrieved", record.get("Title"));
+									});
+
+									// To fetch the next page of records, call `fetchNextPage`.
+									// If there are more records, `page` will get called again.
+									// If there are no more records, `done` will get called.
+									fetchNextPage();
+								},
+								function done(err) {
+									if (err) {
+										console.error(err);
+										return;
+									} else {
+										console.log(ALLRECORDS);
+										build_list(ALLRECORDS);
+									}
+								}
+							);
+					</script>
+					<!-- LIST -->
+					<div id="airtable-list">
+						<ul class="list"></ul>
 					</div>
-					<p>repeats...</p>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+					<script>
+						function build_list(ALLRECORDS) {
+							var options = {
+								valueNames: ["Title", "Author(s)", "Content"],
+								item: `
+										<li class="callout">
+											<article class="grid-x grid-padding-x">
+												<div class="small-8 cell">
+													<h5 class="Title">Text Title</h5>
+													<div class="Content">Content</div>
+													<div class="Notes">Notes</div>
+													<p><strong>Technology:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
+													<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
+												</div>
+												<div class="small-4 cell"><p>
+														<span class="Author(s)">Author(s)</span>,
+														<span class="Country">Country</span>,
+														<span class="date">date</span>,
+														<span class="genre">genre</span>,
+														<span class="format">format</span>,
+														<span class="themes">themes</span>..
+													</p></div>
+											</article>
+										</li>
+										`,
+							};
+
+							var values = ALLRECORDS;
+
+							var airtableList = new List("airtable-list", options, values);
+						}
+					</script>
 				</div>
 			</div>
 			<!--  -->
 		</div>
 		<!--  -->
-		<footer class="grid-x grid-padding-x grid-padding-y align-middle" id="contact">
-			<div class="large-4 medium-4 small-4 cell">
-				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
-				</div>
-			</div>
-			<div class="large-8 medium-8 small-8 cell">
-				<div>
-					<ul class="menu align-right">
-						<ul class="dropdown menu align-right" data-dropdown-menu>
-							<li><a href="about.html">About</a></li>
-							<li><a href="legal.html">Legal Stuff</a></li>
-						</ul>
-					</ul>
-				</div>
-			</div>
-		</footer>
-
-		<script src="js/vendor/jquery.js"></script>
-		<script src="js/vendor/what-input.js"></script>
-		<script src="js/vendor/foundation.js"></script>
-		<script src="js/app.js"></script>
 	</body>
 </html>

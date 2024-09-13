@@ -1,5 +1,9 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap"); */
 * {
-	font-family: Consolas, "Liberation Mono", Courier, monospace;
+	font-family: "Courier New", Courier, monospace;
+}
+html {
+	font-size: 110%;
 }
 .gt_float_switcher img {
 	display: none !important;
@@ -41,4 +45,22 @@ footer {
 .tag {
 	background-color: aquamarine;
 	padding: 2px 5px;
+}
+.grid-container {
+	max-width: none;
+}
+h1 {
+	font-size: 4rem;
+}
+#airtable-list ul {
+	list-style: none;
+	margin: 0;
+}
+.callout {
+	color: white;
+	border: double 3px;
+	background-color: transparent;
+}
+a {
+	cursor: pointer;
 }

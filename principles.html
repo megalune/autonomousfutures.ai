@@ -13,7 +13,7 @@
 		<header class="grid-x grid-padding-x grid-padding-y align-middle">
 			<div class="large-4 medium-4 small-4 cell">
 				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
+					<a href="index.html" rel="home">&#9744; Autonomous Futures</a>
 				</div>
 			</div>
 			<div class="large-8 medium-8 small-8 cell">
@@ -21,8 +21,10 @@
 					<ul class="dropdown menu align-right" data-dropdown-menu>
 						<li><a href="manifesto.html">Manifesto</a></li>
 						<li><a href="principles.html">Principles</a></li>
-						<li><a href="texts.html">Texts</a></li>
+						<li><a href="texts.html">Cultural Texts</a></li>
 						<li><a href="recommendations.html">Design Recommendations</a></li>
+						<li><a href="profiles.html">Profiles</a></li>
+						<li><a href="usage.html">Usage</a></li>
 					</ul>
 				</div>
 			</div>
@@ -32,59 +34,28 @@
 			<!--  -->
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
-					<h1>Principles</h1>
+					<h1 id="airtable_title">loading...</h1>
+					<section id="airtable_content"></section>
 
-					<h2>Collective Power</h2>
-					<ol>
-						<li>Distribute Power</li>
-						<li>Expect Individual Accountability</li>
-						<li>Eliminate Asymmetrical Surveillance</li>
-						<li>Challenge Default Experiences and Perspectives</li>
-					</ol>
+					<article class="callout">
+						<h5>Name</h5>
+						<p>text.</p>
+					</article>
 
-					<h2>Inclusive Engagement</h2>
-					<ol>
-						<li>Protect the Community</li>
-						<li>Encounter Others with Respect</li>
-						<li>Embrace Inclusive and Diverse Genres of Storytelling</li>
-					</ol>
-					<h2>Cultural Specificity</h2>
-
-					<ol>
-						<li>Recognize the Full Histories and Life Cycles of Emerging Technologies</li>
-						<li>Rights to Individual and Collective Memories and Histories</li>
-						<li>Place-Making as a Part of Social Presence</li>
-					</ol>
-
-					<p>this page would showcase a network graph mapping how everything relates, colors can be used to represent different categories such as text, person, theme...</p>
-
-					<a href="https://flourish.studio/visualisations/network-charts/"><img src="network-graph.png" /></a>
+					<p>repeats...</p>
 				</div>
 			</div>
 			<!--  -->
 		</div>
-		<!--  -->
-		<footer class="grid-x grid-padding-x grid-padding-y align-middle" id="contact">
-			<div class="large-4 medium-4 small-4 cell">
-				<div>
-					<a href="index.html" rel="home" class="h4"><img src="media/logo.png" alt="" class="logo" /> Autonomous Futures</a>
-				</div>
-			</div>
-			<div class="large-8 medium-8 small-8 cell">
-				<div>
-					<ul class="menu align-right">
-						<ul class="dropdown menu align-right" data-dropdown-menu>
-							<li><a href="#">About</a></li>
-							<li><a href="legal.html">Legal Stuff</a></li>
-						</ul>
-					</ul>
-				</div>
-			</div>
-		</footer>
-
-		<script src="js/vendor/jquery.js"></script>
-		<script src="js/vendor/what-input.js"></script>
-		<script src="js/vendor/foundation.js"></script>
+		<!-- AirTable -->
+		<script src="js/airtable.browser.js"></script>
+		<script src="js/showdown.min.js"></script>
 		<script src="js/app.js"></script>
+		<script>
+			get_page_from_airtable("recF3nU9M1d0583os");
+		</script>
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBH48TW4" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
 	</body>
 </html>
