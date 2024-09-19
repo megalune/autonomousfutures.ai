@@ -36,13 +36,7 @@
 				<div class="small-12 cell">
 					<h1 id="airtable_title">loading...</h1>
 					<section id="airtable_content"></section>
-
-					<article class="callout">
-						<h5>Name</h5>
-						<p>text.</p>
-					</article>
-
-					<p>repeats...</p>
+					<section id="airtable_list"></section>
 				</div>
 			</div>
 			<!--  -->
@@ -53,6 +47,77 @@
 		<script src="js/app.js"></script>
 		<script>
 			get_page_from_airtable("recF3nU9M1d0583os");
+			// API: https://airtable.com/developers/web/api/introduction
+			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
+			var fetch_set = [];
+			var Airtable = require("airtable");
+			var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
+
+			base("Principles")
+				.select({
+					// maxRecords: 3,
+					view: "Grid view",
+					// filterByFormula: "{DisplayOnWeb} = TRUE()",
+					// sort: [{ field: "Title", direction: "asc" }],
+					fields: ["Title", "Content", "OVERARCHING"],
+				})
+				.eachPage(
+					function page(records, fetchNextPage) {
+						// This function (`page`) will get called for each page of records.
+
+						records.forEach(function (record) {
+							let the_fields = record.fields;
+							// console.log(the_fields);
+							fetch_set = fetch_set.concat(the_fields);
+						});
+
+						// To fetch the next page of records, call `fetchNextPage`.
+						// If there are more records, `page` will get called again.
+						// If there are no more records, `done` will get called.
+						fetchNextPage();
+					},
+					function done(err) {
+						if (err) {
+							console.error(err);
+							return;
+						} else {
+							console.log(fetch_set);
+							build_list(fetch_set);
+						}
+					}
+				);
+			function build_list(recs) {
+				var converter = new showdown.Converter();
+
+				recs.forEach(function (rec) {
+					let output = "";
+					// console.log(rec);
+					if (typeof rec["OVERARCHING"] !== "undefined") {
+						// console.log(rec["OVERARCHING"]);
+						output =
+							`<hr><h2>` +
+							rec["Title"] +
+							`</h2>
+						<div class="Content">` +
+							converter.makeHtml(rec["Content"]) +
+							`</div>`;
+					} else {
+						// console.log("sadf");
+						output =
+							`<details>
+							<summary><strong>` +
+							rec["Title"] +
+							`</strong></summary>
+							<div class="Content indent">` +
+							converter.makeHtml(rec["Content"]) +
+							`</div>
+						</details>`;
+					}
+					console.log(output);
+					// let output = `<details>`;
+					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
+				});
+			}
 		</script>
 		<!-- Google Tag Manager (noscript) -->
 		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBH48TW4" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>

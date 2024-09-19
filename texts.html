@@ -34,56 +34,17 @@
 			<!--  -->
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
-					<h1>Cultural Texts</h1>
+					<h1 id="airtable_title">loading...</h1>
+					<section id="airtable_content"></section>
+					<section id="airtable_list"></section>
 
-					<p>Pellentesque urna nisl, ornare eget est faucibus, commodo commodo sapien. Maecenas ac est finibus, placerat magna ultricies, commodo purus. Morbi faucibus aliquet magna eu fermentum. Nunc mi dui, accumsan sollicitudin vulputate a, lacinia aliquet arcu. Nulla sem tellus, aliquam vitae nulla vulputate, aliquam luctus lectus. Sed pellentesque et risus vel viverra. Etiam tincidunt dui dui, in pretium nisl dignissim at. Sed sit amet turpis eget ipsum dapibus accumsan. Aenean tempor dui in turpis viverra lacinia. Nulla pretium fringilla orci, nec finibus sapien aliquet ullamcorper. Nunc mauris nisi, accumsan eget laoreet at, varius eu nisl. Aliquam erat volutpat. Vestibulum mollis ex enim, non tincidunt arcu sagittis a. Mauris consectetur tincidunt diam et sollicitudin. Nulla ex metus, pharetra eu sollicitudin ac, tristique vel ligula.</p>
-
-					<!-- <div class="grid-x grid-margin-x">
-						<div class="cell auto">
-							<select>
-								<option selected>genre</option>
-								<option>abcd...</option>
-								<option>abcd...</option>
-								<option>abcd...</option>
-							</select>
-						</div>
-						<div class="cell auto">
-							<select id="dino-select">
-								<option selected>format</option>
-								<option>abcd...</option>
-								<option>abcd...</option>
-								<option>abcd...</option>
-							</select>
-						</div>
-						<div class="cell auto">
-							<select id="dino-select">
-								<option selected>theme</option>
-								<option>abcd...</option>
-								<option>abcd...</option>
-								<option>abcd...</option>
-							</select>
-						</div>
-					</div> -->
-					<!-- <div class="callout">
-						<article class="grid-x grid-padding-x">
-							<div class="small-4 cell"><img src="https://picsum.photos/400/800" /></div>
-							<div class="small-8 cell">
-								<h5>Text Title</h5>
-								<p>author, country, date, genre, format, themes...</p>
-								<p>
-									Essun/Syanite/Damaya, the main character in science fiction author N.K. Jemison’s Broken Earth trilogy, is an orogene, or a human who has an additional nerve (sessapinae) in the back of her neck that enables her to feel and control seismic events. Orogenes are sensitive to the movements of the earth but unlike the feared and non-human stone eaters, they do not possess the ability to travel within and through the earth’s crust. Because humans fear the power of orogenes they have devised a tiered social system of control. The Fulcrum is a government entity that oversees orogene training. Some orogenes are born within the Fulcrum when top-ranking orogenes are required to breed. Other orogenes are brought to the Fulcrum when they are born elsewhere. Since they are a discriminate against population, their families usually either turn them in to the Fulcrum or murder them. Orogenes undergo extensive training under the supervision of Guardians at the
-									Fulcrum until they are ready to travel outside of the Fulcrum to complete missions. If an orogene cannot be trained or repeatedly commits violations, their sessapinae is removed, they are stripped of their ability for self-control, and they are sedated and placed in a tower where their seismic energy is used.
-								</p>
-								<p>What illustrates this theme: Orogenes like Essun possess an additional nerve (sessapinae) in the back of their necks that enable them to feel and control seismic events. Stone eaters like Hoa are centuries-old non-humans constructed for the purpose of building obelisks that are responsible for destroying the Earth’s moon. Orogenes and stone eaters are feared by non-orogene humans (stills) and orogenes are exploited rather than appreciated for their unique, live-saving skills.</p>
-								<p>Why this is important inside the text: Orogenes and stone eaters both represent the collapse of boundaries between human and nature. Through their sessapinae, orogenes are able to sense seismic activity in addition to the other five human senses. As their name implies, stone eaters consume the earth but they can also travel through it and communicate telepathically with one another. They are man-made beings for whom death is almost impossible and so they also challenge the boundaries between human, nature, and machine.</p>
-								<p><strong>Technology:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
-								<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
-							</div>
-						</article>
-					</div> -->
-
+					<!-- AirTable -->
 					<script src="js/airtable.browser.js"></script>
+					<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script> -->
+					<script src="js/showdown.min.js"></script>
+					<script src="js/app.js"></script>
 					<script>
+						get_page_from_airtable("recUz7IFlSohWcYM9");
 						// API: https://airtable.com/developers/web/api/introduction
 
 						// var Airtable = require("airtable");
@@ -131,43 +92,124 @@
 									}
 								}
 							);
-					</script>
-					<!-- LIST -->
-					<div id="airtable-list">
-						<ul class="list"></ul>
-					</div>
-					<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
-					<script>
-						function build_list(ALLRECORDS) {
-							var options = {
-								valueNames: ["Title", "Author(s)", "Content"],
-								item: `
-										<li class="callout">
-											<article class="grid-x grid-padding-x">
-												<div class="small-8 cell">
-													<h5 class="Title">Text Title</h5>
-													<div class="Content">Content</div>
-													<div class="Notes">Notes</div>
-													<p><strong>Technology:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
-													<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
-												</div>
-												<div class="small-4 cell"><p>
-														<span class="Author(s)">Author(s)</span>,
-														<span class="Country">Country</span>,
-														<span class="date">date</span>,
-														<span class="genre">genre</span>,
-														<span class="format">format</span>,
-														<span class="themes">themes</span>..
-													</p></div>
-											</article>
-										</li>
-										`,
-							};
+						// https://listjs.com/api/
+						function build_list(recs) {
+							var converter = new showdown.Converter();
 
-							var values = ALLRECORDS;
+							recs.forEach(function (rec) {
+								console.log("rec");
+								// console.log(rec["sadfg"]);
+								// implode texts
+								// implode p
+								let allb = "";
+								if (typeof rec["By (Web)"] !== "undefined") {
+									rec["By (Web)"].forEach(function (b) {
+										allb += "<span>" + b + "</span>";
+									});
+								}
+								//
+								let allp = "";
+								if (typeof rec["Principles (Web)"] !== "undefined") {
+									rec["Principles (Web)"].forEach(function (p) {
+										allp += "<span>" + p + "</span>";
+									});
+								}
+								//
+								let alld = "";
+								if (typeof rec["Design Recommendations (Web)"] !== "undefined") {
+									rec["Design Recommendations (Web)"].forEach(function (d) {
+										alld += "<span>" + d + "</span>";
+									});
+								}
+								let g = rec["Genre"] || "n/a";
+								let m = rec["Medium"] || "n/a";
+								let c = rec["Country"] || "n/a";
+								let y = rec["Year"] || "n/a";
+								let output =
+									`<article class="callout">
+										<h2>` +
+									rec["Title"] +
+									`</h2>
+										<p>` +
+									allb +
+									`</p>
+										<div class="grid-x grid-padding-x">
+											<div class="small-3 cell"><p>Genre: ` +
+									g +
+									`</p></div>
+											<div class="small-3 cell"><p>Medium: ` +
+									m +
+									`</p></div>
+											<div class="small-3 cell"><p>Country: ` +
+									c +
+									`</p></div>
+											<div class="small-3 cell"><p>Year: ` +
+									y +
+									`</p></div>
+										</div>
 
-							var airtableList = new List("airtable-list", options, values);
+
+											<details>
+												<summary><strong>Details...</strong></summary>
+												<div class="indent">
+												<p class="list"><strong>Principles:</strong> ` +
+									allp +
+									`</p>
+												<p class="list"><strong>Cultural Texts:</strong> ` +
+									alld +
+									`</p>
+												<div class="Content">` +
+									converter.makeHtml(rec["Content"]) +
+									`</div>
+													</div>
+										</details>
+									</article>`;
+								document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
+							});
 						}
+
+						// function build_list(ALLRECORDS) {
+						// 				var options = {
+						// 					valueNames: ["Title", "Author(s)", "Content"],
+						// 					item:
+						// 						`<li class="callout">
+						// 							<article class="grid-x grid-padding-x">
+						// 								<div class="small-8 cell">
+						// 									<h5 class="Title">Text Title</h5>
+						// 									<div class="Content">Content</div>
+						// 									<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
+						// 									<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
+						// 								</div>
+						// 								<div class="small-4 cell"><p>
+						// 										<span class="Author(s)">Author(s)</span>,
+						// 										<span class="Country">Country</span>,
+						// 										<span class="Date">Date</span>,
+						// 										<span class="Genre">Genre</span>,
+						// 										<span class="Medium">Medium</span>,
+						// 										<span class="Year">Year</span>
+						// 									</p></div>
+						// 								<p class="list"><strong>Principles:</strong> ` +
+						// 						allp +
+						// 						`</p>
+						// 								<details>
+						// 									<summary><strong>Details...</strong></summary>
+						// 									<div class="indent">
+						// 									<p class="list"><strong>Cultural Texts:</strong> ` +
+						// 						allt +
+						// 						`</p>
+						// 										<div class="footnotes"><strong>Footnotes:</strong> ` +
+						// 						converter.makeHtml(rec["Footnotes"]) +
+						// 						`</div></div>
+						// 							</details>
+						// 						</article>
+						// 						</li>
+						// 						`,
+						// 				};
+
+						// 				var values = ALLRECORDS;
+
+						// 				var airtableList = new List("airtable-list", options, values);
+						// 			}
 					</script>
 				</div>
 			</div>

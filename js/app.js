@@ -9,13 +9,13 @@ function get_page_from_airtable( recID ){
 			console.error(err);
 			return;
 		}
-		console.log("Retrieved", record.id);
-		console.log(record);
-		console.log(record.fields.Content);
+		// console.log("Retrieved", record.id);
+		// console.log(record);
+		// console.log(record.fields.Content);
 		//
 		var converter = new showdown.Converter();
 		var html = converter.makeHtml(record.fields.Content);
-		console.log(html);
+		// console.log(html);
 		document.getElementById("airtable_content").innerHTML = html;
 		document.getElementById("airtable_title").innerHTML = record.fields.Title;
 	});

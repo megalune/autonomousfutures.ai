@@ -1,6 +1,9 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap"); */
+/* good serif font: "Source Code Pro",  */
+/* @import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
+
 * {
-	font-family: "Courier New", Courier, monospace;
+	font-family: Courier, monospace;
 }
 html {
 	font-size: 110%;
@@ -52,6 +55,14 @@ footer {
 h1 {
 	font-size: 4rem;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: "Major Mono Display", Courier, monospace;
+}
 #airtable-list ul {
 	list-style: none;
 	margin: 0;
@@ -63,4 +74,16 @@ h1 {
 }
 a {
 	cursor: pointer;
+}
+/* .footnotes {
+	font-size: 80%;
+} */
+details .indent {
+	margin-left: 0.9rem;
+}
+.list span {
+	background-color: rgba(255, 255, 255, 0.125);
+	padding: 2px 6px;
+	margin-right: 5px;
+	white-space: nowrap;
 }
