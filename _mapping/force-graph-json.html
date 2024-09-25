@@ -1,0 +1,143 @@
+list themes list recs list texts while linking to themes and recs and genres (and building genre list)
+
+<!-- AirTable -->
+<script src="js/airtable.browser.js"></script>
+<!-- <script src="js/app.js"></script> -->
+<script>
+	var nodes = [];
+	var links = [];
+	var genres = [];
+	var Airtable = require("airtable");
+	var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
+
+	//
+	base("Principles")
+		.select({
+			// maxRecords: 3,
+			view: "Grid view",
+			// filterByFormula: "{DisplayOnWeb} = TRUE()",
+			fields: ["Title"],
+		})
+		.eachPage(
+			function page(records, fetchNextPage) {
+				// This function (`page`) will get called for each page of records.
+
+				records.forEach(function (record) {
+					let thing1 = '{ "id": "' + record.id + '", "label": "' + record.fields["Title"] + '", "group": "Principles", "color": "red" }';
+					nodes = nodes.concat(thing1);
+				});
+
+				// To fetch the next page of records, call `fetchNextPage`.
+				// If there are more records, `page` will get called again.
+				// If there are no more records, `done` will get called.
+				fetchNextPage();
+			},
+			function done(err) {
+				if (err) {
+					console.error(err);
+					return;
+				} else {
+					// console.log(nodes);
+					// console.log(links);
+				}
+			}
+		);
+	//
+	base("Design Recommendations")
+		.select({
+			// maxRecords: 3,
+			view: "Grid view",
+			// filterByFormula: "{DisplayOnWeb} = TRUE()",
+			fields: ["Title"],
+		})
+		.eachPage(
+			function page(records, fetchNextPage) {
+				// This function (`page`) will get called for each page of records.
+
+				records.forEach(function (record) {
+					let thing1 = '{ "id": "' + record.id + '", "label": "' + record.fields["Title"] + '", "group": "Recommendations", "color": "blue" }';
+					nodes = nodes.concat(thing1);
+				});
+
+				// To fetch the next page of records, call `fetchNextPage`.
+				// If there are more records, `page` will get called again.
+				// If there are no more records, `done` will get called.
+				fetchNextPage();
+			},
+			function done(err) {
+				if (err) {
+					console.error(err);
+					return;
+				} else {
+					// console.log(nodes);
+					// console.log(links);
+					// console.log(JSON.stringify(nodes));
+					// // console.log(JSON.stringify(links));
+					// myjson = '{"nodes":[' + nodes + '],"links":[' + links + "]}";
+					// // console.log(myjson);
+				}
+			}
+		);
+	//
+	base("Cultural Texts")
+		.select({
+			// maxRecords: 3,
+			view: "Grid view",
+			// filterByFormula: "{DisplayOnWeb} = TRUE()",
+			fields: ["Title", "Principles", "Design Recommendations", "Genre"],
+		})
+		.eachPage(
+			function page(records, fetchNextPage) {
+				// This function (`page`) will get called for each page of records.
+
+				records.forEach(function (record) {
+					let thing1 = '{ "id": "' + record.id + '", "label": "' + record.fields["Title"] + '", "group": "Texts", "color": "green" }';
+					nodes = nodes.concat(thing1);
+					//
+					if (typeof record.fields["Genre"] !== "undefined") {
+						let jonjon = record.fields["Genre"];
+						if (genres.includes(jonjon) === false) {
+							genres.push(jonjon);
+							let thing_g_n = '{ "id": "' + jonjon + '", "label": "' + jonjon + '", "group": "Genre", "color": "yellow" }';
+							nodes = nodes.concat(thing_g_n);
+						}
+						let thing_g_l = '{ "source": "' + record.id + '", "target": "' + jonjon + '" }';
+						links = links.concat(thing_g_l);
+					}
+					//
+					if (typeof record.fields["Principles"] !== "undefined") {
+						let prin = record.fields["Principles"];
+						prin.forEach(function (p) {
+							let thing_p = '{ "source": "' + record.id + '", "target": "' + p + '" }';
+							links = links.concat(thing_p);
+						});
+					}
+					//
+					if (typeof record.fields["Design Recommendations"] !== "undefined") {
+						let recs = record.fields["Design Recommendations"];
+						recs.forEach(function (r) {
+							let thing_d = '{ "source": "' + record.id + '", "target": "' + r + '" }';
+							links = links.concat(thing_d);
+						});
+					}
+				});
+
+				// To fetch the next page of records, call `fetchNextPage`.
+				// If there are more records, `page` will get called again.
+				// If there are no more records, `done` will get called.
+				fetchNextPage();
+			},
+			function done(err) {
+				if (err) {
+					console.error(err);
+					return;
+				} else {
+					// console.log(nodes);
+					// console.log(links);
+					// console.log(genres);
+					myjson = '{"nodes":[' + nodes + '],"links":[' + links + "]}";
+					console.log(myjson);
+				}
+			}
+		);
+</script>

@@ -19,202 +19,193 @@
 			<div class="large-8 medium-8 small-8 cell">
 				<div>
 					<ul class="dropdown menu align-right" data-dropdown-menu>
-						<li><a href="manifesto.html">Manifesto</a></li>
+						<li><a href="about.html">About</a></li>
 						<li><a href="principles.html">Principles</a></li>
 						<li><a href="texts.html">Cultural Texts</a></li>
 						<li><a href="recommendations.html">Design Recommendations</a></li>
-						<li><a href="profiles.html">Profiles</a></li>
-						<li><a href="usage.html">Usage</a></li>
+						<li><a href="contact.html">Join</a></li>
 					</ul>
 				</div>
 			</div>
 		</header>
 		<!--  -->
-		<div class="grid-container">
-			<!--  -->
+		<main class="grid-container">
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
 					<h1 id="airtable_title">loading...</h1>
 					<section id="airtable_content"></section>
 					<section id="airtable_list"></section>
-
-					<!-- AirTable -->
-					<script src="js/airtable.browser.js"></script>
-					<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script> -->
-					<script src="js/showdown.min.js"></script>
-					<script src="js/app.js"></script>
-					<script>
-						get_page_from_airtable("recUz7IFlSohWcYM9");
-						// API: https://airtable.com/developers/web/api/introduction
-
-						// var Airtable = require("airtable");
-						// Airtable.configure({
-						// 	endpointUrl: "https://api.airtable.com",
-						// 	apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91",
-						// });
-						// var base = Airtable.base("appBKn1E7gk7Kakkj");
-
-						// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
-						var ALLRECORDS = [];
-						var Airtable = require("airtable");
-						var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
-
-						base("Cultural Texts")
-							.select({
-								// Selecting the first 3 records in Grid view:
-								// maxRecords: 3,
-								view: "Grid view",
-								filterByFormula: "{DisplayOnWeb} = TRUE()",
-							})
-							.eachPage(
-								function page(records, fetchNextPage) {
-									// This function (`page`) will get called for each page of records.
-
-									records.forEach(function (record) {
-										let mything = record.fields;
-										// console.log(mything);
-										ALLRECORDS = ALLRECORDS.concat(mything);
-										// console.log("Retrieved", record.get("Title"));
-									});
-
-									// To fetch the next page of records, call `fetchNextPage`.
-									// If there are more records, `page` will get called again.
-									// If there are no more records, `done` will get called.
-									fetchNextPage();
-								},
-								function done(err) {
-									if (err) {
-										console.error(err);
-										return;
-									} else {
-										console.log(ALLRECORDS);
-										build_list(ALLRECORDS);
-									}
-								}
-							);
-						// https://listjs.com/api/
-						function build_list(recs) {
-							var converter = new showdown.Converter();
-
-							recs.forEach(function (rec) {
-								console.log("rec");
-								// console.log(rec["sadfg"]);
-								// implode texts
-								// implode p
-								let allb = "";
-								if (typeof rec["By (Web)"] !== "undefined") {
-									rec["By (Web)"].forEach(function (b) {
-										allb += "<span>" + b + "</span>";
-									});
-								}
-								//
-								let allp = "";
-								if (typeof rec["Principles (Web)"] !== "undefined") {
-									rec["Principles (Web)"].forEach(function (p) {
-										allp += "<span>" + p + "</span>";
-									});
-								}
-								//
-								let alld = "";
-								if (typeof rec["Design Recommendations (Web)"] !== "undefined") {
-									rec["Design Recommendations (Web)"].forEach(function (d) {
-										alld += "<span>" + d + "</span>";
-									});
-								}
-								let g = rec["Genre"] || "n/a";
-								let m = rec["Medium"] || "n/a";
-								let c = rec["Country"] || "n/a";
-								let y = rec["Year"] || "n/a";
-								let output =
-									`<article class="callout">
-										<h2>` +
-									rec["Title"] +
-									`</h2>
-										<p>` +
-									allb +
-									`</p>
-										<div class="grid-x grid-padding-x">
-											<div class="small-3 cell"><p>Genre: ` +
-									g +
-									`</p></div>
-											<div class="small-3 cell"><p>Medium: ` +
-									m +
-									`</p></div>
-											<div class="small-3 cell"><p>Country: ` +
-									c +
-									`</p></div>
-											<div class="small-3 cell"><p>Year: ` +
-									y +
-									`</p></div>
-										</div>
-
-
-											<details>
-												<summary><strong>Details...</strong></summary>
-												<div class="indent">
-												<p class="list"><strong>Principles:</strong> ` +
-									allp +
-									`</p>
-												<p class="list"><strong>Design Recommendations:</strong> ` +
-									alld +
-									`</p>
-												<div class="Content">` +
-									converter.makeHtml(rec["Content"]) +
-									`</div>
-													</div>
-										</details>
-									</article>`;
-								document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
-							});
-						}
-
-						// function build_list(ALLRECORDS) {
-						// 				var options = {
-						// 					valueNames: ["Title", "Author(s)", "Content"],
-						// 					item:
-						// 						`<li class="callout">
-						// 							<article class="grid-x grid-padding-x">
-						// 								<div class="small-8 cell">
-						// 									<h5 class="Title">Text Title</h5>
-						// 									<div class="Content">Content</div>
-						// 									<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
-						// 									<p><strong>Recommendations:</strong> <span class="tag">tag</span> <span class="tag">tag</span></p>
-						// 								</div>
-						// 								<div class="small-4 cell"><p>
-						// 										<span class="Author(s)">Author(s)</span>,
-						// 										<span class="Country">Country</span>,
-						// 										<span class="Date">Date</span>,
-						// 										<span class="Genre">Genre</span>,
-						// 										<span class="Medium">Medium</span>,
-						// 										<span class="Year">Year</span>
-						// 									</p></div>
-						// 								<p class="list"><strong>Principles:</strong> ` +
-						// 						allp +
-						// 						`</p>
-						// 								<details>
-						// 									<summary><strong>Details...</strong></summary>
-						// 									<div class="indent">
-						// 									<p class="list"><strong>Cultural Texts:</strong> ` +
-						// 						allt +
-						// 						`</p>
-						// 										<div class="footnotes"><strong>Footnotes:</strong> ` +
-						// 						converter.makeHtml(rec["Footnotes"]) +
-						// 						`</div></div>
-						// 							</details>
-						// 						</article>
-						// 						</li>
-						// 						`,
-						// 				};
-
-						// 				var values = ALLRECORDS;
-
-						// 				var airtableList = new List("airtable-list", options, values);
-						// 			}
-					</script>
 				</div>
 			</div>
-			<!--  -->
-		</div>
+		</main>
 		<!--  -->
+		<footer class="grid-x grid-padding-x grid-padding-y align-middle">
+			<div class="large-4 medium-4 small-4 cell">
+				<div>
+					<a href="index.html" rel="home">&#9744; Autonomous Futures</a>
+				</div>
+			</div>
+			<div class="large-8 medium-8 small-8 cell">
+				<div>
+					<ul class="dropdown menu align-right" data-dropdown-menu>
+						<li><a href="contact.html">Contact</a></li>
+						<li><a href="legal.html">Privacy Notice</a></li>
+					</ul>
+				</div>
+			</div>
+		</footer>
+
+		<!-- AirTable -->
+		<script src="js/airtable.browser.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script> -->
+		<script src="js/showdown.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			get_page_from_airtable("recUz7IFlSohWcYM9");
+			// API: https://airtable.com/developers/web/api/introduction
+
+			// var Airtable = require("airtable");
+			// Airtable.configure({
+			// 	endpointUrl: "https://api.airtable.com",
+			// 	apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91",
+			// });
+			// var base = Airtable.base("appBKn1E7gk7Kakkj");
+
+			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
+			var ALLRECORDS = [];
+			var Airtable = require("airtable");
+			var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
+
+			base("Cultural Texts")
+				.select({
+					// Selecting the first 3 records in Grid view:
+					// maxRecords: 3,
+					view: "Grid view",
+					filterByFormula: "{DisplayOnWeb} = TRUE()",
+					sort: [{ field: "Title", direction: "asc" }],
+					fields: ["Title", "Content", "Genre", "Medium", "Country", "Year", "Principles (Web)", "By (Web)", "Design Recommendations (Web)"],
+				})
+				.eachPage(
+					function page(records, fetchNextPage) {
+						// This function (`page`) will get called for each page of records.
+
+						records.forEach(function (record) {
+							let mything = record.fields;
+							// console.log(mything);
+							ALLRECORDS = ALLRECORDS.concat(mything);
+							// console.log("Retrieved", record.get("Title"));
+						});
+
+						// To fetch the next page of records, call `fetchNextPage`.
+						// If there are more records, `page` will get called again.
+						// If there are no more records, `done` will get called.
+						fetchNextPage();
+					},
+					function done(err) {
+						if (err) {
+							console.error(err);
+							return;
+						} else {
+							console.log(ALLRECORDS);
+							build_list(ALLRECORDS);
+						}
+					}
+				);
+			// https://listjs.com/api/
+			function build_list(recs) {
+				var converter = new showdown.Converter();
+
+				recs.forEach(function (rec) {
+					console.log("rec");
+					// console.log(rec["sadfg"]);
+					// implode texts
+					// implode p
+					let allb = "";
+					if (typeof rec["By (Web)"] !== "undefined") {
+						rec["By (Web)"].forEach(function (b) {
+							allb += "<span>" + b + "</span>";
+						});
+					}
+					//
+					let allp = "";
+					if (typeof rec["Principles (Web)"] !== "undefined") {
+						rec["Principles (Web)"].forEach(function (p) {
+							allp += "<span>" + p + "</span>";
+						});
+					}
+					//
+					let alld = "";
+					if (typeof rec["Design Recommendations (Web)"] !== "undefined") {
+						rec["Design Recommendations (Web)"].forEach(function (d) {
+							alld += "<span>" + d + "</span>";
+						});
+					}
+					let g = rec["Genre"] || "n/a";
+					let m = rec["Medium"] || "n/a";
+					let c = rec["Country"] || "n/a";
+					let y = rec["Year"] || "n/a";
+					let output =
+						`<article class="callout" id="` +
+						rec["Title"].replaceAll(" ", "_") +
+						`">
+							<h2>` +
+						rec["Title"] +
+						`</h2>
+							<p>` +
+						allb +
+						`</p>
+							<div class="grid-x grid-padding-x">
+								<div class="small-3 cell"><p>Genre: ` +
+						g +
+						`</p></div>
+								<div class="small-3 cell"><p>Medium: ` +
+						m +
+						`</p></div>
+								<div class="small-3 cell"><p>Country: ` +
+						c +
+						`</p></div>
+								<div class="small-3 cell"><p>Year: ` +
+						y +
+						`</p></div>
+							</div>
+
+
+								<details>
+									<summary><strong>Details...</strong></summary>
+									<div class="indent">
+									<p class="list"><strong>Principles:</strong> ` +
+						allp +
+						`</p>
+									<p class="list"><strong>Design Recommendations:</strong> ` +
+						alld +
+						`</p>
+									<div class="Content">` +
+						converter.makeHtml(rec["Content"]) +
+						`</div>
+										</div>
+							</details>
+						</article>`;
+					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
+				});
+				// scroll to text
+				var hash = window.location.hash.substring(1);
+				console.log(hash);
+				var jump = document.getElementById(window.location.hash.substring(1)).offsetTop; //Getting Y of target element
+				document.getElementById(window.location.hash.substring(1)).scrollIntoView({
+					behavior: "smooth",
+				});
+			}
+		</script>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9PGKGEL1G"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+
+			gtag("config", "G-J9PGKGEL1G");
+		</script>
 	</body>
 </html>

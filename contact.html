@@ -30,11 +30,45 @@
 		</header>
 		<!--  -->
 		<main class="grid-container">
-			<!--  -->
 			<div class="grid-x grid-padding-x">
 				<div class="small-12 cell">
 					<h1 id="airtable_title">loading...</h1>
 					<section id="airtable_content"></section>
+					<!--  -->
+					<hr />
+					<div id="mc_embed_shell" style="max-width: 75rem; margin: 1.25rem auto">
+						<div id="mc_embed_signup">
+							<form action="https://autonomousfutures.us10.list-manage.com/subscribe/post?u=4b5bffd69206a224af9645e8e&amp;id=6ebf577e44&amp;f_id=00b38ae3f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_self" novalidate="">
+								<div id="mc_embed_signup_scroll">
+									<h2>Subscribe to Our Newsletter</h2>
+									<!-- <div class="indicates-required"><span class="asterisk">*</span> indicates required</div> -->
+									<div class="mc-field-group">
+										<label for="mce-EMAIL">Email Address <span class="asterisk">*required</span></label
+										><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value="" />
+									</div>
+									<div id="mce-responses" class="clear foot">
+										<div class="response" id="mce-error-response" style="display: none"></div>
+										<div class="response" id="mce-success-response" style="display: none"></div>
+									</div>
+									<div aria-hidden="true" style="position: absolute; left: -5000px">
+										/* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+										<input type="text" name="b_4b5bffd69206a224af9645e8e_6ebf577e44" tabindex="-1" value="" />
+									</div>
+									<div class="optionalParent">
+										<div class="clear foot">
+											<input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe" />
+											<a href="http://eepurl.com/iZS_0g" title="Mailchimp - email marketing made easy and fun" style="display: inline-block; position: relative; top: 7px; left: -40px"
+												><span style="display: inline-block; background-color: transparent; border-radius: 4px"><img class="refferal_badge" src="https://digitalasset.intuit.com/render/content/dam/intuit/mc-fe/en_us/images/intuit-mc-rewards-text-light.svg" alt="Intuit Mailchimp" style="width: 220px; height: 40px; display: flex; padding: 2px 0px; justify-content: center; align-items: center" /></span
+											></a>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<hr />
+					<!--  -->
+					<h2>Current Memebers</h2>
 					<section id="airtable_list"></section>
 				</div>
 			</div>
@@ -60,20 +94,20 @@
 		<script src="js/showdown.min.js"></script>
 		<script src="js/app.js"></script>
 		<script>
-			get_page_from_airtable("recF3nU9M1d0583os");
+			get_page_from_airtable("recL0az9cFyXDzvSf");
 			// API: https://airtable.com/developers/web/api/introduction
 			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
 			var fetch_set = [];
 			var Airtable = require("airtable");
 			var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
 
-			base("Principles")
+			base("Profiles")
 				.select({
 					// maxRecords: 3,
 					view: "Grid view",
-					// filterByFormula: "{DisplayOnWeb} = TRUE()",
-					// sort: [{ field: "Title", direction: "asc" }],
-					fields: ["Title", "Content", "OVERARCHING"],
+					filterByFormula: "{DisplayOnWeb} = TRUE()",
+					sort: [{ field: "Name", direction: "asc" }],
+					fields: ["Name", "Content", "Photo"],
 				})
 				.eachPage(
 					function page(records, fetchNextPage) {
@@ -81,7 +115,6 @@
 
 						records.forEach(function (record) {
 							let the_fields = record.fields;
-							// console.log(the_fields);
 							fetch_set = fetch_set.concat(the_fields);
 						});
 
@@ -95,53 +128,35 @@
 							console.error(err);
 							return;
 						} else {
-							console.log(fetch_set);
 							build_list(fetch_set);
 						}
 					}
 				);
-			function build_list(recs) {
+			function build_list(profiles) {
 				var converter = new showdown.Converter();
 
-				recs.forEach(function (rec) {
-					let output = "";
-					// console.log(rec);
-					if (typeof rec["OVERARCHING"] !== "undefined") {
-						// console.log(rec["OVERARCHING"]);
-						output =
-							`<hr><h2 id="` +
-							rec["Title"].replaceAll(" ", "_") +
-							`">` +
-							rec["Title"] +
-							`</h2>
-						<div class="Content">` +
-							converter.makeHtml(rec["Content"]) +
-							`</div>`;
-					} else {
-						// console.log("sadf");
-						output =
-							`<details id="` +
-							rec["Title"].replaceAll(" ", "_") +
-							`">
-							<summary><strong>` +
-							rec["Title"] +
-							`</strong></summary>
-							<div class="Content indent">` +
-							converter.makeHtml(rec["Content"]) +
-							`</div>
-						</details>`;
+				profiles.forEach(function (profile) {
+					console.log("profiles");
+					console.log(profile);
+					let photo = "";
+					if (typeof profile["Photo"] !== "undefined") {
+						photo = '<img src="' + profile["Photo"][0]["thumbnails"]["large"]["url"] + '" alt="">';
 					}
-					console.log(output);
-					// let output = `<details>`;
+					let output =
+						`<section class="callout"><div class="grid-x grid-padding-x grid-padding-y align-middle">
+			<div class="large-8 medium-8 small-8 cell">
+				<h5 class="Name">` +
+						profile.Name +
+						`</h5>
+											<div class="Content">` +
+						converter.makeHtml(profile.Content) +
+						`</div>
+			</div>
+			<div class="large-4 medium-4 small-4 cell">` +
+						photo +
+						`</div></div>
+								</section>`;
 					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
-				});
-				// scroll to text
-				var hash = window.location.hash.substring(1);
-				console.log(hash);
-				var jump = document.getElementById(window.location.hash.substring(1)).offsetTop; //Getting Y of target element
-				document.getElementById(window.location.hash.substring(1)).open = true;
-				document.getElementById(window.location.hash.substring(1)).scrollIntoView({
-					behavior: "smooth",
 				});
 			}
 		</script>

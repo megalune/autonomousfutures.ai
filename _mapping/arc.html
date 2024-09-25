@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+
+<!-- https://d3-graph-gallery.com/graph/arc_template.html -->
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Load color palette -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<style>
+	#my_dataviz {
+		transform: rotate(90deg);
+	}
+</style>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+<script>
+	// set the dimensions and margins of the graph
+	var margin = { top: 0, right: 0, bottom: 150, left: 0 },
+		width = 1200 - margin.left - margin.right,
+		height = 800 - margin.top - margin.bottom;
+
+	// append the svg object to the body of the page
+	var svg = d3
+		.select("#my_dataviz")
+		.append("svg")
+		// .attr("width", "1200")
+		// .attr("height", "800")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		// .attr("viewBox", `0 0 300 600`)
+		// .attr("width", "100%")
+		// .attr("height", "100%")
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	// Read dummy data
+	d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_researcherNetwork.json", function (data) {
+		// List of node names
+		// override data
+		mydata = `{"nodes":[{ "id": "rec2MPjHFUwuPCB7t", "name": "Community Governance Tools", "n": "5", "grp": "2" },{ "id": "recv045xpXlKpWVqT", "name": "Transparency", "n": "5", "grp": "2" },{ "id": "recJ7vOCUvlWwp9UX", "name": "Data Minimization", "n": "5", "grp": "2" },{ "id": "reckNMpdqFxVqWmsv", "name": "Community Co-Design", "n": "5", "grp": "2" },{ "id": "recNuretc27wsSoOF", "name": "Interoperability", "n": "5", "grp": "2" },{ "id": "recvMQFoxogN8Z7yd", "name": "Reporting Tools", "n": "5", "grp": "2" },{ "id": "recafEbnObOXUqgGu", "name": "Intergenerational Knowledge Sharing", "n": "5", "grp": "2" },{ "id": "recevS7dZIZRH4Kdx", "name": "Represent Lived Experiences", "n": "5", "grp": "2" },{ "id": "recGN6cQfeJaKZNHO", "name": "Diverse Hiring & Educational Outreach", "n": "5", "grp": "2" },{ "id": "reckMInC5IpOvswfQ", "name": "Inclusive Iconography & Symbolism", "n": "5", "grp": "2" },{ "id": "recBDIciFDDScaalm", "name": "Open Source Creation Tools", "n": "5", "grp": "2" },{ "id": "recLfKcTrAcDLi4XO", "name": "Community-Driven Content", "n": "5", "grp": "2" },{ "id": "reckCG8teBr8H1Pv5", "name": "Inclusive Algorithms", "n": "5", "grp": "2" },{ "id": "rec2rZsRqoi5t1qWG", "name": "Privacy", "n": "5", "grp": "2" },{ "id": "reclTjiVbHB38PsfQ", "name": "Safety", "n": "5", "grp": "2" },{ "id": "recP4K9TmvIqu9Kr2", "name": "Curb Cut Solutions", "n": "5", "grp": "2" },{ "id": "reczwMAr89uEfDI6i", "name": "Sustainable Product Development", "n": "5", "grp": "2" },{ "id": "recTpZSTXVSu16qJW", "name": "Culturally Specific Interfaces", "n": "5", "grp": "2" },{ "id": "recuKawn5jjfcteSW", "name": "Collective Power", "n": "5", "grp": "1" },{ "id": "recPUdsY2GnRXyHBB", "name": "Distribute Power", "n": "5", "grp": "1" },{ "id": "recUaGWR0d6B83xSD", "name": "Expect Individual Accountability", "n": "5", "grp": "1" },{ "id": "rec4426dXcl4Z70Lc", "name": "Eliminate Asymmetrical Surveillance", "n": "5", "grp": "1" },{ "id": "recEOUNIZzADDIXeU", "name": "Challenge Default Experiences and Perspectives", "n": "5", "grp": "1" },{ "id": "recNu9CXd0TBW2497", "name": "Inclusive Engagement", "n": "5", "grp": "1" },{ "id": "recBXUNWuJdJlyVMs", "name": "Protect the Community", "n": "5", "grp": "1" },{ "id": "recXh66TZ9EqVtQEm", "name": "Encounter Others with Respect", "n": "5", "grp": "1" },{ "id": "recw7IDoaIU2YF5tg", "name": "Embrace Inclusive and Diverse Genres of Storytelling", "n": "5", "grp": "1" },{ "id": "rec3PAGnyWinauMDd", "name": "Cultural Specificity", "n": "5", "grp": "1" },{ "id": "recrLXqpHK8V0zFbV", "name": "Recognize the Full Histories and Life Cycles of Emerging Technologies", "n": "5", "grp": "1" },{ "id": "reck4xORNfrSu2JJ1", "name": "Rights to Individual and Collective Memories and Histories", "n": "5", "grp": "1" },{ "id": "recl2wretC8uCt8CZ", "name": "Center Placemaking as a Part of Social Presence", "n": "5", "grp": "1" },{ "id": "recgzb7gnIP6bZxxr", "name": "Biidibaan (The Dawn Comes)", "n": "5", "grp": "3" },{ "id": "Indigenous Futurist", "name": "Indigenous Futurist", "n": "5", "grp": "4" },{ "id": "recJoIC6mSPCImTJs", "name": "Broken Earth Trilogy", "n": "5", "grp": "3" },{ "id": "Afrofuturist", "name": "Afrofuturist", "n": "5", "grp": "4" },{ "id": "recxogN0O3dJewDxW", "name": "After Yang", "n": "5", "grp": "3" },{ "id": "Asian Futurist", "name": "Asian Futurist", "n": "5", "grp": "4" },{ "id": "recZHMimbB5Zjztdy", "name": "Parable of the Talents (and Parable of the Sower)", "n": "5", "grp": "3" },{ "id": "recCoFhZoIpBm59JO", "name": "Ue-pucase: Water Master", "n": "5", "grp": "3" },{ "id": "recTxZowcwsNC0mWG", "name": "Watchmen", "n": "5", "grp": "3" },{ "id": "recEhddhmR94zSeXJ", "name": "Sword Art Online", "n": "5", "grp": "3" },{ "id": "recO0eWIBpBEh2Zh7", "name": "Washington Black", "n": "5", "grp": "3" },{ "id": "rec653JGvXgGJpp7g", "name": "Biidaaban (The Dawn Comes)", "n": "5", "grp": "3" },{ "id": "recWqec1lSyyFLc0a", "name": "The City Born Great", "n": "5", "grp": "3" },{ "id": "recQCVgjEn0Ad6CJy", "name": "Lovecraft Country", "n": "5", "grp": "3" },{ "id": "recvi5Wfv5VwFM3tc", "name": "Sin Sol", "n": "5", "grp": "3" },{ "id": "Latinx Futurist", "name": "Latinx Futurist", "n": "5", "grp": "4" },{ "id": "recxROGVi3niAvwux", "name": "Migwite’tmeg: We Remember It", "n": "5", "grp": "3" },{ "id": "recjoU1HJwOxgfDO2", "name": "An Unkindness of Ghosts", "n": "5", "grp": "3" },{ "id": "rec2fENYaFkzQOfzB", "name": "Neptune Frost", "n": "5", "grp": "3" },{ "id": "reczpz3J8hqA4AvBm", "name": "Traveling While Black", "n": "5", "grp": "3" },{ "id": "Afrofuturist ", "name": "Afrofuturist ", "n": "5", "grp": "4" },{ "id": "reco292V0FTGWcFF9", "name": "Nope", "n": "5", "grp": "3" },{ "id": "recdfsABUDr3RmejF", "name": "Three-Body Problem", "n": "5", "grp": "3" },{ "id": "rec1eWJUb5ChApkEp", "name": "Sankofa City", "n": "5", "grp": "3" },{ "id": "recaMx6Kg76qdJpMm", "name": "On the Morning You Wake (to the End of the World)", "n": "5", "grp": "3" },{ "id": "recKpSPdJKcrDq6NC", "name": "Space Traders", "n": "5", "grp": "3" },{ "id": "recGMSQJfP9MI00bS", "name": "Black Panther", "n": "5", "grp": "3" },{ "id": "recWyZ0gPLmVzAXn1", "name": "Bitter Root", "n": "5", "grp": "3" },{ "id": "recdyO1j6lciOCOqV", "name": "6th World: An Origin Story", "n": "5", "grp": "3" },{ "id": "recbw5yCFvmTvgKk2", "name": "Dirty Computer", "n": "5", "grp": "3" },{ "id": "rec34DZugI624Y3zr", "name": "Destroyer", "n": "5", "grp": "3" },{ "id": "recmyoeyzc74rZJFF", "name": "Sleep Dealer", "n": "5", "grp": "3" },{ "id": "recXpkpfysPMv5Mgv", "name": "AIR / Survey", "n": "5", "grp": "3" },{ "id": "recHojzjkuMsULdeW", "name": "Kara Walker's Exhibit", "n": "5", "grp": "3" },{ "id": "rec4UeJGC5s5YYp3y", "name": "The U&AI Lab", "n": "5", "grp": "3" },{ "id": "rec7C20jQkGSs7gkn", "name": "Bina48", "n": "5", "grp": "3" }],"links":[{ "source": "recgzb7gnIP6bZxxr", "target": "Indigenous Futurist" },{ "source": "recgzb7gnIP6bZxxr", "target": "recEOUNIZzADDIXeU" },{ "source": "recgzb7gnIP6bZxxr", "target": "recuKawn5jjfcteSW" },{ "source": "recgzb7gnIP6bZxxr", "target": "recP4K9TmvIqu9Kr2" },{ "source": "recJoIC6mSPCImTJs", "target": "Afrofuturist" },{ "source": "recJoIC6mSPCImTJs", "target": "recUaGWR0d6B83xSD" },{ "source": "recJoIC6mSPCImTJs", "target": "recEOUNIZzADDIXeU" },{ "source": "recJoIC6mSPCImTJs", "target": "recuKawn5jjfcteSW" },{ "source": "recJoIC6mSPCImTJs", "target": "recP4K9TmvIqu9Kr2" },{ "source": "recxogN0O3dJewDxW", "target": "Asian Futurist" },{ "source": "recxogN0O3dJewDxW", "target": "recUaGWR0d6B83xSD" },{ "source": "recZHMimbB5Zjztdy", "target": "Afrofuturist" },{ "source": "recZHMimbB5Zjztdy", "target": "recUaGWR0d6B83xSD" },{ "source": "recZHMimbB5Zjztdy", "target": "recuKawn5jjfcteSW" },{ "source": "recZHMimbB5Zjztdy", "target": "recNu9CXd0TBW2497" },{ "source": "recZHMimbB5Zjztdy", "target": "recBXUNWuJdJlyVMs" },{ "source": "recZHMimbB5Zjztdy", "target": "rec2MPjHFUwuPCB7t" },{ "source": "recCoFhZoIpBm59JO", "target": "Indigenous Futurist" },{ "source": "recCoFhZoIpBm59JO", "target": "recUaGWR0d6B83xSD" },{ "source": "recTxZowcwsNC0mWG", "target": "Afrofuturist" },{ "source": "recTxZowcwsNC0mWG", "target": "recUaGWR0d6B83xSD" },{ "source": "recTxZowcwsNC0mWG", "target": "recPUdsY2GnRXyHBB" },{ "source": "recTxZowcwsNC0mWG", "target": "recuKawn5jjfcteSW" },{ "source": "recTxZowcwsNC0mWG", "target": "recl2wretC8uCt8CZ" },{ "source": "recTxZowcwsNC0mWG", "target": "recv045xpXlKpWVqT" },{ "source": "recTxZowcwsNC0mWG", "target": "recNuretc27wsSoOF" },{ "source": "recTxZowcwsNC0mWG", "target": "recvMQFoxogN8Z7yd" },{ "source": "recTxZowcwsNC0mWG", "target": "reczwMAr89uEfDI6i" },{ "source": "recTxZowcwsNC0mWG", "target": "recTpZSTXVSu16qJW" },{ "source": "recTxZowcwsNC0mWG", "target": "reclTjiVbHB38PsfQ" },{ "source": "recEhddhmR94zSeXJ", "target": "Asian Futurist" },{ "source": "recEhddhmR94zSeXJ", "target": "recUaGWR0d6B83xSD" },{ "source": "recEhddhmR94zSeXJ", "target": "recPUdsY2GnRXyHBB" },{ "source": "recEhddhmR94zSeXJ", "target": "recuKawn5jjfcteSW" },{ "source": "recEhddhmR94zSeXJ", "target": "recv045xpXlKpWVqT" },{ "source": "recEhddhmR94zSeXJ", "target": "recNuretc27wsSoOF" },{ "source": "recEhddhmR94zSeXJ", "target": "recvMQFoxogN8Z7yd" },{ "source": "recEhddhmR94zSeXJ", "target": "reclTjiVbHB38PsfQ" },{ "source": "recO0eWIBpBEh2Zh7", "target": "recUaGWR0d6B83xSD" },{ "source": "recO0eWIBpBEh2Zh7", "target": "recPUdsY2GnRXyHBB" },{ "source": "recO0eWIBpBEh2Zh7", "target": "recuKawn5jjfcteSW" },{ "source": "recO0eWIBpBEh2Zh7", "target": "recv045xpXlKpWVqT" },{ "source": "recO0eWIBpBEh2Zh7", "target": "recNuretc27wsSoOF" },{ "source": "recO0eWIBpBEh2Zh7", "target": "recvMQFoxogN8Z7yd" },{ "source": "recO0eWIBpBEh2Zh7", "target": "reclTjiVbHB38PsfQ" },{ "source": "rec653JGvXgGJpp7g", "target": "recEOUNIZzADDIXeU" },{ "source": "rec653JGvXgGJpp7g", "target": "recuKawn5jjfcteSW" },{ "source": "recWqec1lSyyFLc0a", "target": "recEOUNIZzADDIXeU" },{ "source": "recWqec1lSyyFLc0a", "target": "recuKawn5jjfcteSW" },{ "source": "recWqec1lSyyFLc0a", "target": "recP4K9TmvIqu9Kr2" },{ "source": "recQCVgjEn0Ad6CJy", "target": "rec4426dXcl4Z70Lc" },{ "source": "recQCVgjEn0Ad6CJy", "target": "recuKawn5jjfcteSW" },{ "source": "recQCVgjEn0Ad6CJy", "target": "recJ7vOCUvlWwp9UX" },{ "source": "recQCVgjEn0Ad6CJy", "target": "reckNMpdqFxVqWmsv" },{ "source": "recvi5Wfv5VwFM3tc", "target": "Latinx Futurist" },{ "source": "recvi5Wfv5VwFM3tc", "target": "rec4426dXcl4Z70Lc" },{ "source": "recvi5Wfv5VwFM3tc", "target": "recuKawn5jjfcteSW" },{ "source": "recvi5Wfv5VwFM3tc", "target": "recJ7vOCUvlWwp9UX" },{ "source": "recvi5Wfv5VwFM3tc", "target": "reckNMpdqFxVqWmsv" },{ "source": "recvi5Wfv5VwFM3tc", "target": "rec2rZsRqoi5t1qWG" },{ "source": "recxROGVi3niAvwux", "target": "Indigenous Futurist" },{ "source": "recxROGVi3niAvwux", "target": "rec4426dXcl4Z70Lc" },{ "source": "recxROGVi3niAvwux", "target": "recuKawn5jjfcteSW" },{ "source": "recxROGVi3niAvwux", "target": "reck4xORNfrSu2JJ1" },{ "source": "recxROGVi3niAvwux", "target": "recJ7vOCUvlWwp9UX" },{ "source": "recxROGVi3niAvwux", "target": "reckNMpdqFxVqWmsv" },{ "source": "recxROGVi3niAvwux", "target": "rec2rZsRqoi5t1qWG" },{ "source": "recjoU1HJwOxgfDO2", "target": "Afrofuturist" },{ "source": "recjoU1HJwOxgfDO2", "target": "recw7IDoaIU2YF5tg" },{ "source": "recjoU1HJwOxgfDO2", "target": "recNu9CXd0TBW2497" },{ "source": "recjoU1HJwOxgfDO2", "target": "recl2wretC8uCt8CZ" },{ "source": "recjoU1HJwOxgfDO2", "target": "recLfKcTrAcDLi4XO" },{ "source": "recjoU1HJwOxgfDO2", "target": "reczwMAr89uEfDI6i" },{ "source": "recjoU1HJwOxgfDO2", "target": "recTpZSTXVSu16qJW" },{ "source": "rec2fENYaFkzQOfzB", "target": "Afrofuturist" },{ "source": "rec2fENYaFkzQOfzB", "target": "recw7IDoaIU2YF5tg" },{ "source": "rec2fENYaFkzQOfzB", "target": "recNu9CXd0TBW2497" },{ "source": "rec2fENYaFkzQOfzB", "target": "recLfKcTrAcDLi4XO" },{ "source": "reczpz3J8hqA4AvBm", "target": "Afrofuturist " },{ "source": "reczpz3J8hqA4AvBm", "target": "recw7IDoaIU2YF5tg" },{ "source": "reczpz3J8hqA4AvBm", "target": "recNu9CXd0TBW2497" },{ "source": "reczpz3J8hqA4AvBm", "target": "recLfKcTrAcDLi4XO" },{ "source": "reczpz3J8hqA4AvBm", "target": "rec2rZsRqoi5t1qWG" },{ "source": "reco292V0FTGWcFF9", "target": "Afrofuturist" },{ "source": "reco292V0FTGWcFF9", "target": "recXh66TZ9EqVtQEm" },{ "source": "reco292V0FTGWcFF9", "target": "recNu9CXd0TBW2497" },{ "source": "reco292V0FTGWcFF9", "target": "recafEbnObOXUqgGu" },{ "source": "reco292V0FTGWcFF9", "target": "recGN6cQfeJaKZNHO" },{ "source": "recdfsABUDr3RmejF", "target": "Asian Futurist" },{ "source": "recdfsABUDr3RmejF", "target": "recXh66TZ9EqVtQEm" },{ "source": "recdfsABUDr3RmejF", "target": "recNu9CXd0TBW2497" },{ "source": "recdfsABUDr3RmejF", "target": "recafEbnObOXUqgGu" },{ "source": "recdfsABUDr3RmejF", "target": "recGN6cQfeJaKZNHO" },{ "source": "rec1eWJUb5ChApkEp", "target": "Afrofuturist" },{ "source": "rec1eWJUb5ChApkEp", "target": "recXh66TZ9EqVtQEm" },{ "source": "rec1eWJUb5ChApkEp", "target": "recNu9CXd0TBW2497" },{ "source": "rec1eWJUb5ChApkEp", "target": "recafEbnObOXUqgGu" },{ "source": "rec1eWJUb5ChApkEp", "target": "recGN6cQfeJaKZNHO" },{ "source": "recaMx6Kg76qdJpMm", "target": "Indigenous Futurist" },{ "source": "recaMx6Kg76qdJpMm", "target": "recBXUNWuJdJlyVMs" },{ "source": "recaMx6Kg76qdJpMm", "target": "recNu9CXd0TBW2497" },{ "source": "recaMx6Kg76qdJpMm", "target": "rec2MPjHFUwuPCB7t" },{ "source": "recKpSPdJKcrDq6NC", "target": "Afrofuturist" },{ "source": "recKpSPdJKcrDq6NC", "target": "recBXUNWuJdJlyVMs" },{ "source": "recKpSPdJKcrDq6NC", "target": "recNu9CXd0TBW2497" },{ "source": "recKpSPdJKcrDq6NC", "target": "rec2MPjHFUwuPCB7t" },{ "source": "recGMSQJfP9MI00bS", "target": "Afrofuturist" },{ "source": "recGMSQJfP9MI00bS", "target": "recrLXqpHK8V0zFbV" },{ "source": "recGMSQJfP9MI00bS", "target": "rec3PAGnyWinauMDd" },{ "source": "recGMSQJfP9MI00bS", "target": "recEOUNIZzADDIXeU" },{ "source": "recGMSQJfP9MI00bS", "target": "reckMInC5IpOvswfQ" },{ "source": "recGMSQJfP9MI00bS", "target": "recBDIciFDDScaalm" },{ "source": "recWyZ0gPLmVzAXn1", "target": "Afrofuturist" },{ "source": "recWyZ0gPLmVzAXn1", "target": "recrLXqpHK8V0zFbV" },{ "source": "recWyZ0gPLmVzAXn1", "target": "rec3PAGnyWinauMDd" },{ "source": "recWyZ0gPLmVzAXn1", "target": "reckMInC5IpOvswfQ" },{ "source": "recWyZ0gPLmVzAXn1", "target": "recBDIciFDDScaalm" },{ "source": "recdyO1j6lciOCOqV", "target": "Indigenous Futurist" },{ "source": "recdyO1j6lciOCOqV", "target": "recrLXqpHK8V0zFbV" },{ "source": "recdyO1j6lciOCOqV", "target": "rec3PAGnyWinauMDd" },{ "source": "recdyO1j6lciOCOqV", "target": "reckMInC5IpOvswfQ" },{ "source": "recdyO1j6lciOCOqV", "target": "recBDIciFDDScaalm" },{ "source": "recbw5yCFvmTvgKk2", "target": "Afrofuturist" },{ "source": "recbw5yCFvmTvgKk2", "target": "reck4xORNfrSu2JJ1" },{ "source": "recbw5yCFvmTvgKk2", "target": "rec3PAGnyWinauMDd" },{ "source": "recbw5yCFvmTvgKk2", "target": "reckCG8teBr8H1Pv5" },{ "source": "rec34DZugI624Y3zr", "target": "Afrofuturist" },{ "source": "rec34DZugI624Y3zr", "target": "reck4xORNfrSu2JJ1" },{ "source": "rec34DZugI624Y3zr", "target": "rec3PAGnyWinauMDd" },{ "source": "rec34DZugI624Y3zr", "target": "reckCG8teBr8H1Pv5" },{ "source": "recmyoeyzc74rZJFF", "target": "Latinx Futurist" },{ "source": "recmyoeyzc74rZJFF", "target": "reck4xORNfrSu2JJ1" },{ "source": "recmyoeyzc74rZJFF", "target": "rec3PAGnyWinauMDd" },{ "source": "recmyoeyzc74rZJFF", "target": "reckCG8teBr8H1Pv5" },{ "source": "recXpkpfysPMv5Mgv", "target": "Indigenous Futurist" },{ "source": "recXpkpfysPMv5Mgv", "target": "recl2wretC8uCt8CZ" },{ "source": "recXpkpfysPMv5Mgv", "target": "rec3PAGnyWinauMDd" },{ "source": "recXpkpfysPMv5Mgv", "target": "reczwMAr89uEfDI6i" },{ "source": "recXpkpfysPMv5Mgv", "target": "recTpZSTXVSu16qJW" }]}
+`;
+		var data = JSON.parse(mydata);
+		var allNodes = data.nodes.map(function (d) {
+			return d.name;
+		});
+
+		// List of groups
+		var allGroups = data.nodes.map(function (d) {
+			return d.grp;
+		});
+		allGroups = [...new Set(allGroups)];
+
+		// A color scale for groups:
+		var color = d3.scaleOrdinal().domain(allGroups).range(d3.schemeSet3);
+
+		// A linear scale for node size
+		var size = d3.scaleLinear().domain([1, 10]).range([2, 10]);
+
+		// A linear scale to position the nodes on the X axis
+		var x = d3.scalePoint().range([0, width]).domain(allNodes);
+
+		// In my input data, links are provided between nodes -id-, NOT between node names.
+		// So I have to do a link between this id and the name
+		var idToNode = {};
+		data.nodes.forEach(function (n) {
+			idToNode[n.id] = n;
+		});
+
+		// Add the links
+		var links = svg
+			.selectAll("mylinks")
+			.data(data.links)
+			.enter()
+			.append("path")
+			.attr("d", function (d) {
+				start = x(idToNode[d.source].name); // X position of start node on the X axis
+				end = x(idToNode[d.target].name); // X position of end node
+				return [
+					"M",
+					start,
+					height - 30, // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
+					"A", // This means we're gonna build an elliptical arc
+					(start - end) / 2,
+					",", // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
+					(start - end) / 2,
+					0,
+					0,
+					",",
+					start < end ? 1 : 0,
+					end,
+					",",
+					height - 30,
+				] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
+					.join(" ");
+			})
+			.style("fill", "none")
+			.attr("stroke", "grey")
+			.style("stroke-width", 1);
+
+		// Add the circle for the nodes
+		var nodes = svg
+			.selectAll("mynodes")
+			.data(
+				data.nodes.sort(function (a, b) {
+					return +b.n - +a.n;
+				})
+			)
+			.enter()
+			.append("circle")
+			.attr("cx", function (d) {
+				return x(d.name);
+			})
+			.attr("cy", height - 30)
+			// .attr("cx", 50)
+			// .attr("cy", function (d) {
+			// 	return y(d.name);
+			// })
+			.attr("r", function (d) {
+				return size(d.n);
+			})
+			.style("fill", function (d) {
+				return color(d.grp);
+			})
+			.attr("stroke", "white");
+
+		// And give them a label
+		var labels = svg
+			.selectAll("mylabels")
+			.data(data.nodes)
+			.enter()
+			.append("text")
+			.attr("x", 0)
+			.attr("y", 0)
+			// .attr("x", 20)
+			// .attr("y", function (d) {
+			// 	return y(d.name);
+			// })
+			.text(function (d) {
+				return d.name;
+			})
+			.style("text-anchor", "end")
+			.attr("transform", function (d) {
+				return "translate(" + (x(d.name) + 4.5) + "," + (height - 20) + ")rotate(-90)";
+			})
+			.style("font-size", 14);
+
+		// Add the highlighting functionality
+		nodes
+			.on("mouseover", function (d) {
+				// Highlight the nodes: every node is green except of him
+				nodes.style("opacity", 0.2);
+				d3.select(this).style("opacity", 1);
+				// Highlight the connections
+				links
+					.style("stroke", function (link_d) {
+						return link_d.source === d.id || link_d.target === d.id ? color(d.grp) : "#b8b8b8";
+					})
+					.style("stroke-opacity", function (link_d) {
+						return link_d.source === d.id || link_d.target === d.id ? 1 : 0.2;
+					})
+					.style("stroke-width", function (link_d) {
+						return link_d.source === d.id || link_d.target === d.id ? 4 : 1;
+					});
+				// labels
+				// 	.style("font-size", function (label_d) {
+				// 		return label_d.name === d.name ? 16 : 6;
+				// 	})
+				// 	.attr("y", function (label_d) {
+				// 		return label_d.name === d.name ? 10 : 0;
+				// 	});
+			})
+			.on("mouseout", function (d) {
+				nodes.style("opacity", 1);
+				links.style("stroke", "grey").style("stroke-opacity", 0.8).style("stroke-width", "1");
+				// labels.style("font-size", 6);
+			});
+	});
+</script>
