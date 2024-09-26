@@ -7,6 +7,8 @@
 - some way to make force chart interactive on mobile
 - Add basic search/filtering to texts page.
 - Add basic search/filtering to recommendations page.
+- a11y testing; svg caption
+- nojs
 
 ## 1.1.0
 - removed data vizualization tests

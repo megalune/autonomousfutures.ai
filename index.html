@@ -58,7 +58,8 @@
 						// const url = "https://gist.githubusercontent.com/robinmackenzie/5c5d2af4e3db47d9150a2c4ba55b7bcd/raw/9f9c6b92d24bd9f9077b7fc6c4bfc5aebd2787d5/harvard_vis.json";
 						const colorlink = "#333";
 						const colorhover = "#fff";
-						const width = window.innerWidth/2;
+						let window_width = window.innerWidth;
+						const width = window_width/2 < 475 ? 475 : window_width/2;
 						const radius = width / 2;
 
 						// JSON formatter
