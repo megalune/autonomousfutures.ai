@@ -26,7 +26,7 @@ list themes list recs list texts while linking to themes and recs and genres (an
 			// maxRecords: 3,
 			view: "Grid view",
 			filterByFormula: "{DisplayOnWeb} = TRUE()",
-			fields: ["Title", "Principles (Web)", "Design Recommendations (Web)", "Genre"],
+			fields: ["Title", "Principles (Web)", "Design Recommendations (Web)", "Genres"],
 		})
 		.eachPage(
 			function page(records, fetchNextPage) {
@@ -35,20 +35,24 @@ list themes list recs list texts while linking to themes and recs and genres (an
 					let t = "root.Texts." + title_safe(record.fields["Title"]);
 					let newNode_t = { name: t, url: "texts.html", imports: [] };
 					// parse g
-					if (typeof record.fields["Genre"] !== "undefined") {
-						let g = "root.Genres." + title_safe(record.fields["Genre"]);
-						if (genres_ping.includes(g) === false) {
-							let newNode_g = { name: g, url: "texts.html", imports: [] };
-							Genres.push(newNode_g);
-						}
-						// add g to t
-						newNode_t["imports"].push(g);
-						// add t to g
-						for (const [key, value] of Object.entries(Genres)) {
-							if (value.name == g) {
-								value.imports.push(t);
+					if (typeof record.fields["Genres"] !== "undefined") {
+						let grenres_cluster = record.fields["Genres"];
+						grenres_cluster.forEach(function (g_i) {
+							let g = "root.Genres." + title_safe(g_i);
+							if (genres_ping.includes(g) === false) {
+								let newNode_g = { name: g, url: "texts.html", imports: [] };
+								genres_ping.push(g);
+								Genres.push(newNode_g);
 							}
-						}
+							// add g to t
+							newNode_t["imports"].push(g);
+							// add t to g
+							for (const [key, value] of Object.entries(Genres)) {
+								if (value.name == g) {
+									value.imports.push(t);
+								}
+							}
+						});
 					}
 					// parse p
 					if (typeof record.fields["Principles (Web)"] !== "undefined") {
@@ -57,6 +61,7 @@ list themes list recs list texts while linking to themes and recs and genres (an
 							let p = "root.Principles." + title_safe(p_i);
 							if (principles_ping.includes(p) === false) {
 								let newNode_p = { name: p, url: "principles.html", imports: [] };
+								principles_ping.push(p);
 								Principles.push(newNode_p);
 							}
 							// add g to t
@@ -76,6 +81,7 @@ list themes list recs list texts while linking to themes and recs and genres (an
 							let r = "root.Recommendations." + title_safe(r_i);
 							if (recommendations_ping.includes(r) === false) {
 								let newNode_r = { name: r, url: "recommendations.html", imports: [] };
+								recommendations_ping.push(r);
 								Recommendations.push(newNode_r);
 							}
 							// add g to t

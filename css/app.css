@@ -87,3 +87,11 @@ details .indent {
 	margin-right: 5px;
 	white-space: nowrap;
 }
+@media screen and (max-width: 39.9375em) {
+	.menu {
+		justify-content: center;
+	}
+}
+a[rel="home"] {
+	font-weight: bold;
+}

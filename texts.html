@@ -83,7 +83,7 @@
 					view: "Grid view",
 					filterByFormula: "{DisplayOnWeb} = TRUE()",
 					sort: [{ field: "Title", direction: "asc" }],
-					fields: ["Title", "Content", "Genre", "Medium", "Country", "Year", "Principles (Web)", "By (Web)", "Design Recommendations (Web)"],
+					fields: ["Title", "Content", "Genres", "Medium", "Country", "Year", "Principles (Web)", "By (Web)", "Design Recommendations (Web)"],
 				})
 				.eachPage(
 					function page(records, fetchNextPage) {
@@ -140,7 +140,7 @@
 							alld += "<span>" + d + "</span>";
 						});
 					}
-					let g = rec["Genre"] || "n/a";
+					let g = rec["Genres"] || "n/a";
 					let m = rec["Medium"] || "n/a";
 					let c = rec["Country"] || "n/a";
 					let y = rec["Year"] || "n/a";
