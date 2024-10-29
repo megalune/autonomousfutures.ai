@@ -35,6 +35,9 @@
 					<section id="mapping"></section>
 					<!-- https://stackoverflow.com/questions/50709722/d3-js-hierarchical-edge-bundling-coloring-by-group -->
 
+					<!-- AirTable -->
+					<script src="js/airtable.browser.js"></script>
+
 					<!-- Load d3.js -->
 					<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.0.0/d3.min.js"></script>
 
@@ -55,6 +58,140 @@
 					</style>
 
 					<script>
+
+
+// Set Item
+// localStorage.clear();
+let cachedAirTable = localStorage.getItem("autonomousfutures_airtable");
+let cachedAirTableTimeStamp = parseInt(localStorage.getItem("autonomousfutures_airtable_cache"));
+let now = Date.now();
+console.log(cachedAirTable);
+// console.log(cachedAirTableTimeStamp);
+// console.log(cachedAirTableTimeStamp+3);
+// console.log(now);
+// 10 minutes
+if(!cachedAirTable || cachedAirTableTimeStamp+600 < now){
+	localStorage.clear();
+	console.log('getting new data');
+	// do new
+	var final_json = [];
+var AIRTABLE = null;
+var principles_ping = [];
+var recommendations_ping = [];
+var genres_ping = [];
+
+var Texts = [];
+var Genres = [];
+var Recommendations = [];
+var Principles = [];
+
+var Airtable = require("airtable");
+var base = new Airtable({ apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91" }).base("appBKn1E7gk7Kakkj");
+
+function title_safe(t) {
+	return t.replaceAll(" ", "_");
+}
+//
+base("Cultural Texts")
+	.select({
+		// maxRecords: 3,
+		view: "Grid view",
+		filterByFormula: "{DisplayOnWeb} = TRUE()",
+		fields: ["Title", "Principles (Web)", "Design Recommendations (Web)", "Genres"],
+	})
+	.eachPage(
+		function page(records, fetchNextPage) {
+			// This function (`page`) will get called for each page of records.
+			records.forEach(function (record) {
+				let t = "root.Texts." + title_safe(record.fields["Title"]);
+				let newNode_t = { name: t, url: "texts.html", imports: [] };
+				// parse g
+				if (typeof record.fields["Genres"] !== "undefined") {
+					let grenres_cluster = record.fields["Genres"];
+					grenres_cluster.forEach(function (g_i) {
+						let g = "root.Genres." + title_safe(g_i);
+						if (genres_ping.includes(g) === false) {
+							let newNode_g = { name: g, url: "texts.html", imports: [] };
+							genres_ping.push(g);
+							Genres.push(newNode_g);
+						}
+						// add g to t
+						newNode_t["imports"].push(g);
+						// add t to g
+						for (const [key, value] of Object.entries(Genres)) {
+							if (value.name == g) {
+								value.imports.push(t);
+							}
+						}
+					});
+				}
+				// parse p
+				if (typeof record.fields["Principles (Web)"] !== "undefined") {
+					let principles_cluster = record.fields["Principles (Web)"];
+					principles_cluster.forEach(function (p_i) {
+						let p = "root.Principles." + title_safe(p_i);
+						if (principles_ping.includes(p) === false) {
+							let newNode_p = { name: p, url: "principles.html", imports: [] };
+							principles_ping.push(p);
+							Principles.push(newNode_p);
+						}
+						// add g to t
+						newNode_t["imports"].push(p);
+						// add t to g
+						for (const [key, value] of Object.entries(Principles)) {
+							if (value.name == p) {
+								value.imports.push(t);
+							}
+						}
+					});
+				}
+				// parse r
+				if (typeof record.fields["Design Recommendations (Web)"] !== "undefined") {
+					let recommendations_cluster = record.fields["Design Recommendations (Web)"];
+					recommendations_cluster.forEach(function (r_i) {
+						let r = "root.Recommendations." + title_safe(r_i);
+						if (recommendations_ping.includes(r) === false) {
+							let newNode_r = { name: r, url: "recommendations.html", imports: [] };
+							recommendations_ping.push(r);
+							Recommendations.push(newNode_r);
+						}
+						// add g to t
+						newNode_t["imports"].push(r);
+						// add t to g
+						for (const [key, value] of Object.entries(Recommendations)) {
+							if (value.name == r) {
+								value.imports.push(t);
+							}
+						}
+					});
+				}
+				//
+				Texts.push(newNode_t);
+			});
+
+			fetchNextPage();
+		},
+		function done(err) {
+			if (err) {
+				console.error(err);
+				return;
+			} else {
+				// console.log(Texts);
+				// console.log(Genres);
+				// console.log(Recommendations);
+				// console.log(Principles);
+				const final_json = [...Texts, ...Genres, ...Recommendations, ...Principles];
+				AIRTABLE = JSON.stringify(final_json);
+				console.log(AIRTABLE);
+				// set new
+				localStorage.setItem("autonomousfutures_airtable", AIRTABLE);
+				localStorage.setItem("autonomousfutures_airtable_cache", Date.now());
+			}
+		}
+	);
+}
+
+
 						// const url = "https://gist.githubusercontent.com/robinmackenzie/5c5d2af4e3db47d9150a2c4ba55b7bcd/raw/9f9c6b92d24bd9f9077b7fc6c4bfc5aebd2787d5/harvard_vis.json";
 						const colorlink = "#333";
 						const colorhover = "#fff";
@@ -65,8 +202,9 @@
 						// JSON formatter
 						// https://jsonformatter.curiousconcept.com/#
 						// d3.json(url).then((json) => {
-							mydata = `[{"name":"root.Texts.Biidaaban_(The_Dawn_Comes)","url":"texts.html","imports":["root.Genres.Indigenous_Futurist","root.Principles.Challenge_Default_Experiences_and_Perspectives","root.Principles.Collective_Power","root.Principles.Cultural_Specificity","root.Principles.Center_Placemaking_as_a_Part_of_Social_Presence","root.Recommendations.Curb_Cut_Solutions","root.Recommendations.Culturally_Specific_Interfaces"]},{"name":"root.Texts.Broken_Earth_Trilogy","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Accountability","root.Principles.Challenge_Default_Experiences_and_Perspectives","root.Principles.Collective_Power","root.Recommendations.Curb_Cut_Solutions"]},{"name":"root.Texts.After_Yang","url":"texts.html","imports":["root.Genres.Asian_Futurist","root.Principles.Accountability","root.Principles.Collective_Power"]},{"name":"root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Accountability","root.Principles.Collective_Power","root.Principles.Inclusive_Engagement","root.Principles.Protect_the_Community","root.Recommendations.Community_Governance_Tools"]},{"name":"root.Texts.Sword_Art_Online","url":"texts.html","imports":["root.Genres.Asian_Futurist","root.Principles.Accountability","root.Principles.Distribute_Power","root.Principles.Collective_Power","root.Recommendations.Transparency","root.Recommendations.Interoperability","root.Recommendations.Reporting_Tools","root.Recommendations.Safety"]},{"name":"root.Texts.Washington_Black","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Genres.South_Asian_Futurist","root.Principles.Accountability","root.Principles.Distribute_Power","root.Principles.Collective_Power","root.Recommendations.Transparency","root.Recommendations.Interoperability","root.Recommendations.Reporting_Tools","root.Recommendations.Safety"]},{"name":"root.Texts.Sin_Sol","url":"texts.html","imports":["root.Genres.Latinx_Futurist","root.Principles.Eliminate_Asymmetrical_Surveillance","root.Principles.Collective_Power","root.Recommendations.Data_Minimization","root.Recommendations.Community_Co-Design","root.Recommendations.Privacy"]},{"name":"root.Texts.An_Unkindness_of_Ghosts","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Embrace_Inclusive_and_Diverse_Genres_of_Storytelling","root.Principles.Inclusive_Engagement","root.Principles.Center_Placemaking_as_a_Part_of_Social_Presence","root.Principles.Cultural_Specificity","root.Recommendations.Community-Driven_Content","root.Recommendations.Sustainable_Product_Development","root.Recommendations.Culturally_Specific_Interfaces"]},{"name":"root.Texts.Traveling_While_Black","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Embrace_Inclusive_and_Diverse_Genres_of_Storytelling","root.Principles.Inclusive_Engagement","root.Recommendations.Community-Driven_Content","root.Recommendations.Privacy"]},{"name":"root.Texts.Sankofa_City","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Encounter_Others_with_Respect","root.Principles.Inclusive_Engagement","root.Recommendations.Intergenerational_Knowledge_Sharing","root.Recommendations.Diverse_Hiring_&_Educational_Outreach"]},{"name":"root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)","url":"texts.html","imports":["root.Genres.Indigenous_Futurist","root.Principles.Protect_the_Community","root.Principles.Inclusive_Engagement","root.Recommendations.Community_Governance_Tools"]},{"name":"root.Texts.Black_Panther","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Recognize_the_Full_Histories_and_Life_Cycles_of_Emerging_Technologies","root.Principles.Cultural_Specificity","root.Principles.Challenge_Default_Experiences_and_Perspectives","root.Recommendations.Inclusive_Iconography_&_Symbolism","root.Recommendations.Open_Source_Creation_Tools"]},{"name":"root.Texts.6th_World:_An_Origin_Story","url":"texts.html","imports":["root.Genres.Indigenous_Futurist","root.Principles.Recognize_the_Full_Histories_and_Life_Cycles_of_Emerging_Technologies","root.Principles.Cultural_Specificity","root.Recommendations.Inclusive_Iconography_&_Symbolism","root.Recommendations.Open_Source_Creation_Tools"]},{"name":"root.Texts.Dirty_Computer","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Rights_to_Individual_and_Collective_Memories_and_Histories","root.Principles.Cultural_Specificity","root.Recommendations.Inclusive_Algorithms"]},{"name":"root.Texts.Sleep_Dealer","url":"texts.html","imports":["root.Genres.Latinx_Futurist","root.Principles.Rights_to_Individual_and_Collective_Memories_and_Histories","root.Principles.Cultural_Specificity","root.Recommendations.Inclusive_Algorithms"]},{"name":"root.Genres.Indigenous_Futurist","url":"texts.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Genres.Afrofuturist","url":"texts.html","imports":["root.Texts.Broken_Earth_Trilogy","root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.Washington_Black","root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black","root.Texts.Sankofa_City","root.Texts.Black_Panther","root.Texts.Dirty_Computer"]},{"name":"root.Genres.Asian_Futurist","url":"texts.html","imports":["root.Texts.After_Yang","root.Texts.Sword_Art_Online"]},{"name":"root.Genres.South_Asian_Futurist","url":"texts.html","imports":["root.Texts.Washington_Black"]},{"name":"root.Genres.Latinx_Futurist","url":"texts.html","imports":["root.Texts.Sin_Sol","root.Texts.Sleep_Dealer"]},{"name":"root.Recommendations.Curb_Cut_Solutions","url":"recommendations.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.Broken_Earth_Trilogy"]},{"name":"root.Recommendations.Culturally_Specific_Interfaces","url":"recommendations.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.An_Unkindness_of_Ghosts"]},{"name":"root.Recommendations.Community_Governance_Tools","url":"recommendations.html","imports":["root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)"]},{"name":"root.Recommendations.Transparency","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Interoperability","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Reporting_Tools","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Safety","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Data_Minimization","url":"recommendations.html","imports":["root.Texts.Sin_Sol"]},{"name":"root.Recommendations.Community_Co-Design","url":"recommendations.html","imports":["root.Texts.Sin_Sol"]},{"name":"root.Recommendations.Privacy","url":"recommendations.html","imports":["root.Texts.Sin_Sol","root.Texts.Traveling_While_Black"]},{"name":"root.Recommendations.Community-Driven_Content","url":"recommendations.html","imports":["root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black"]},{"name":"root.Recommendations.Sustainable_Product_Development","url":"recommendations.html","imports":["root.Texts.An_Unkindness_of_Ghosts"]},{"name":"root.Recommendations.Intergenerational_Knowledge_Sharing","url":"recommendations.html","imports":["root.Texts.Sankofa_City"]},{"name":"root.Recommendations.Diverse_Hiring_&_Educational_Outreach","url":"recommendations.html","imports":["root.Texts.Sankofa_City"]},{"name":"root.Recommendations.Inclusive_Iconography_&_Symbolism","url":"recommendations.html","imports":["root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Recommendations.Open_Source_Creation_Tools","url":"recommendations.html","imports":["root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Recommendations.Inclusive_Algorithms","url":"recommendations.html","imports":["root.Texts.Dirty_Computer","root.Texts.Sleep_Dealer"]},{"name":"root.Principles.Challenge_Default_Experiences_and_Perspectives","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.Broken_Earth_Trilogy","root.Texts.Black_Panther"]},{"name":"root.Principles.Collective_Power","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.Broken_Earth_Trilogy","root.Texts.After_Yang","root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.Sword_Art_Online","root.Texts.Washington_Black","root.Texts.Sin_Sol"]},{"name":"root.Principles.Cultural_Specificity","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.An_Unkindness_of_Ghosts","root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story","root.Texts.Dirty_Computer","root.Texts.Sleep_Dealer"]},{"name":"root.Principles.Center_Placemaking_as_a_Part_of_Social_Presence","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.An_Unkindness_of_Ghosts"]},{"name":"root.Principles.Accountability","url":"principles.html","imports":["root.Texts.Broken_Earth_Trilogy","root.Texts.After_Yang","root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Principles.Inclusive_Engagement","url":"principles.html","imports":["root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black","root.Texts.Sankofa_City","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)"]},{"name":"root.Principles.Protect_the_Community","url":"principles.html","imports":["root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)"]},{"name":"root.Principles.Distribute_Power","url":"principles.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Principles.Eliminate_Asymmetrical_Surveillance","url":"principles.html","imports":["root.Texts.Sin_Sol"]},{"name":"root.Principles.Embrace_Inclusive_and_Diverse_Genres_of_Storytelling","url":"principles.html","imports":["root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black"]},{"name":"root.Principles.Encounter_Others_with_Respect","url":"principles.html","imports":["root.Texts.Sankofa_City"]},{"name":"root.Principles.Recognize_the_Full_Histories_and_Life_Cycles_of_Emerging_Technologies","url":"principles.html","imports":["root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Principles.Rights_to_Individual_and_Collective_Memories_and_Histories","url":"principles.html","imports":["root.Texts.Dirty_Computer","root.Texts.Sleep_Dealer"]},{"name":"root.Genres.Arabfuturism_(coming_soon)","url":"","imports":[]}
-							,{"name":"root.Genres.Feminist_Futurism_(coming_soon)","url":"","imports":[]}]`;
+							mydata = cachedAirTable;
+							// mydata = `[{"name":"root.Texts.Biidaaban_(The_Dawn_Comes)","url":"texts.html","imports":["root.Genres.Indigenous_Futurist","root.Principles.Challenge_Default_Experiences_and_Perspectives","root.Principles.Collective_Power","root.Principles.Cultural_Specificity","root.Principles.Center_Placemaking_as_a_Part_of_Social_Presence","root.Recommendations.Curb_Cut_Solutions","root.Recommendations.Culturally_Specific_Interfaces"]},{"name":"root.Texts.Broken_Earth_Trilogy","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Accountability","root.Principles.Challenge_Default_Experiences_and_Perspectives","root.Principles.Collective_Power","root.Recommendations.Curb_Cut_Solutions"]},{"name":"root.Texts.After_Yang","url":"texts.html","imports":["root.Genres.Asian_Futurist","root.Principles.Accountability","root.Principles.Collective_Power"]},{"name":"root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Accountability","root.Principles.Collective_Power","root.Principles.Inclusive_Engagement","root.Principles.Protect_the_Community","root.Recommendations.Community_Governance_Tools"]},{"name":"root.Texts.Sword_Art_Online","url":"texts.html","imports":["root.Genres.Asian_Futurist","root.Principles.Accountability","root.Principles.Distribute_Power","root.Principles.Collective_Power","root.Recommendations.Transparency","root.Recommendations.Interoperability","root.Recommendations.Reporting_Tools","root.Recommendations.Safety"]},{"name":"root.Texts.Washington_Black","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Genres.South_Asian_Futurist","root.Principles.Accountability","root.Principles.Distribute_Power","root.Principles.Collective_Power","root.Recommendations.Transparency","root.Recommendations.Interoperability","root.Recommendations.Reporting_Tools","root.Recommendations.Safety"]},{"name":"root.Texts.Sin_Sol","url":"texts.html","imports":["root.Genres.Latinx_Futurist","root.Principles.Eliminate_Asymmetrical_Surveillance","root.Principles.Collective_Power","root.Recommendations.Data_Minimization","root.Recommendations.Community_Co-Design","root.Recommendations.Privacy"]},{"name":"root.Texts.An_Unkindness_of_Ghosts","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Embrace_Inclusive_and_Diverse_Genres_of_Storytelling","root.Principles.Inclusive_Engagement","root.Principles.Center_Placemaking_as_a_Part_of_Social_Presence","root.Principles.Cultural_Specificity","root.Recommendations.Community-Driven_Content","root.Recommendations.Sustainable_Product_Development","root.Recommendations.Culturally_Specific_Interfaces"]},{"name":"root.Texts.Traveling_While_Black","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Embrace_Inclusive_and_Diverse_Genres_of_Storytelling","root.Principles.Inclusive_Engagement","root.Recommendations.Community-Driven_Content","root.Recommendations.Privacy"]},{"name":"root.Texts.Sankofa_City","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Encounter_Others_with_Respect","root.Principles.Inclusive_Engagement","root.Recommendations.Intergenerational_Knowledge_Sharing","root.Recommendations.Diverse_Hiring_&_Educational_Outreach"]},{"name":"root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)","url":"texts.html","imports":["root.Genres.Indigenous_Futurist","root.Principles.Protect_the_Community","root.Principles.Inclusive_Engagement","root.Recommendations.Community_Governance_Tools"]},{"name":"root.Texts.Black_Panther","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Recognize_the_Full_Histories_and_Life_Cycles_of_Emerging_Technologies","root.Principles.Cultural_Specificity","root.Principles.Challenge_Default_Experiences_and_Perspectives","root.Recommendations.Inclusive_Iconography_&_Symbolism","root.Recommendations.Open_Source_Creation_Tools"]},{"name":"root.Texts.6th_World:_An_Origin_Story","url":"texts.html","imports":["root.Genres.Indigenous_Futurist","root.Principles.Recognize_the_Full_Histories_and_Life_Cycles_of_Emerging_Technologies","root.Principles.Cultural_Specificity","root.Recommendations.Inclusive_Iconography_&_Symbolism","root.Recommendations.Open_Source_Creation_Tools"]},{"name":"root.Texts.Dirty_Computer","url":"texts.html","imports":["root.Genres.Afrofuturist","root.Principles.Rights_to_Individual_and_Collective_Memories_and_Histories","root.Principles.Cultural_Specificity","root.Recommendations.Inclusive_Algorithms"]},{"name":"root.Texts.Sleep_Dealer","url":"texts.html","imports":["root.Genres.Latinx_Futurist","root.Principles.Rights_to_Individual_and_Collective_Memories_and_Histories","root.Principles.Cultural_Specificity","root.Recommendations.Inclusive_Algorithms"]},{"name":"root.Genres.Indigenous_Futurist","url":"texts.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Genres.Afrofuturist","url":"texts.html","imports":["root.Texts.Broken_Earth_Trilogy","root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.Washington_Black","root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black","root.Texts.Sankofa_City","root.Texts.Black_Panther","root.Texts.Dirty_Computer"]},{"name":"root.Genres.Asian_Futurist","url":"texts.html","imports":["root.Texts.After_Yang","root.Texts.Sword_Art_Online"]},{"name":"root.Genres.South_Asian_Futurist","url":"texts.html","imports":["root.Texts.Washington_Black"]},{"name":"root.Genres.Latinx_Futurist","url":"texts.html","imports":["root.Texts.Sin_Sol","root.Texts.Sleep_Dealer"]},{"name":"root.Recommendations.Curb_Cut_Solutions","url":"recommendations.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.Broken_Earth_Trilogy"]},{"name":"root.Recommendations.Culturally_Specific_Interfaces","url":"recommendations.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.An_Unkindness_of_Ghosts"]},{"name":"root.Recommendations.Community_Governance_Tools","url":"recommendations.html","imports":["root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)"]},{"name":"root.Recommendations.Transparency","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Interoperability","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Reporting_Tools","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Safety","url":"recommendations.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Recommendations.Data_Minimization","url":"recommendations.html","imports":["root.Texts.Sin_Sol"]},{"name":"root.Recommendations.Community_Co-Design","url":"recommendations.html","imports":["root.Texts.Sin_Sol"]},{"name":"root.Recommendations.Privacy","url":"recommendations.html","imports":["root.Texts.Sin_Sol","root.Texts.Traveling_While_Black"]},{"name":"root.Recommendations.Community-Driven_Content","url":"recommendations.html","imports":["root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black"]},{"name":"root.Recommendations.Sustainable_Product_Development","url":"recommendations.html","imports":["root.Texts.An_Unkindness_of_Ghosts"]},{"name":"root.Recommendations.Intergenerational_Knowledge_Sharing","url":"recommendations.html","imports":["root.Texts.Sankofa_City"]},{"name":"root.Recommendations.Diverse_Hiring_&_Educational_Outreach","url":"recommendations.html","imports":["root.Texts.Sankofa_City"]},{"name":"root.Recommendations.Inclusive_Iconography_&_Symbolism","url":"recommendations.html","imports":["root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Recommendations.Open_Source_Creation_Tools","url":"recommendations.html","imports":["root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Recommendations.Inclusive_Algorithms","url":"recommendations.html","imports":["root.Texts.Dirty_Computer","root.Texts.Sleep_Dealer"]},{"name":"root.Principles.Challenge_Default_Experiences_and_Perspectives","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.Broken_Earth_Trilogy","root.Texts.Black_Panther"]},{"name":"root.Principles.Collective_Power","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.Broken_Earth_Trilogy","root.Texts.After_Yang","root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.Sword_Art_Online","root.Texts.Washington_Black","root.Texts.Sin_Sol"]},{"name":"root.Principles.Cultural_Specificity","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.An_Unkindness_of_Ghosts","root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story","root.Texts.Dirty_Computer","root.Texts.Sleep_Dealer"]},{"name":"root.Principles.Center_Placemaking_as_a_Part_of_Social_Presence","url":"principles.html","imports":["root.Texts.Biidaaban_(The_Dawn_Comes)","root.Texts.An_Unkindness_of_Ghosts"]},{"name":"root.Principles.Accountability","url":"principles.html","imports":["root.Texts.Broken_Earth_Trilogy","root.Texts.After_Yang","root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Principles.Inclusive_Engagement","url":"principles.html","imports":["root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black","root.Texts.Sankofa_City","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)"]},{"name":"root.Principles.Protect_the_Community","url":"principles.html","imports":["root.Texts.Parable_of_the_Talents_(and_Parable_of_the_Sower)","root.Texts.On_the_Morning_You_Wake_(to_the_End_of_the_World)"]},{"name":"root.Principles.Distribute_Power","url":"principles.html","imports":["root.Texts.Sword_Art_Online","root.Texts.Washington_Black"]},{"name":"root.Principles.Eliminate_Asymmetrical_Surveillance","url":"principles.html","imports":["root.Texts.Sin_Sol"]},{"name":"root.Principles.Embrace_Inclusive_and_Diverse_Genres_of_Storytelling","url":"principles.html","imports":["root.Texts.An_Unkindness_of_Ghosts","root.Texts.Traveling_While_Black"]},{"name":"root.Principles.Encounter_Others_with_Respect","url":"principles.html","imports":["root.Texts.Sankofa_City"]},{"name":"root.Principles.Recognize_the_Full_Histories_and_Life_Cycles_of_Emerging_Technologies","url":"principles.html","imports":["root.Texts.Black_Panther","root.Texts.6th_World:_An_Origin_Story"]},{"name":"root.Principles.Rights_to_Individual_and_Collective_Memories_and_Histories","url":"principles.html","imports":["root.Texts.Dirty_Computer","root.Texts.Sleep_Dealer"]},{"name":"root.Genres.Arabfuturism_(coming_soon)","url":"","imports":[]}
+							// ,{"name":"root.Genres.Feminist_Futurism_(coming_soon)","url":"","imports":[]}]`;
 							// mydata = mydata + `
 							// ,{"name":"root.Genres.Arabfuturism ","url":"","imports":[]}
 							// ,{"name":"root.Genres.Feminist_Futurism","url":"","imports":[]}
