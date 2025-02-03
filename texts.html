@@ -62,15 +62,8 @@
 		<script src="js/app.js"></script>
 		<script>
 			get_page_from_airtable("recUz7IFlSohWcYM9");
+
 			// API: https://airtable.com/developers/web/api/introduction
-
-			// var Airtable = require("airtable");
-			// Airtable.configure({
-			// 	endpointUrl: "https://api.airtable.com",
-			// 	apiKey: "pattA7nyQpqdRuVkV.5da2261a64ad65d025c024cd1c6a9d35fe1fb299738eab1f73ab9c412da94c91",
-			// });
-			// var base = Airtable.base("appBKn1E7gk7Kakkj");
-
 			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
 			var ALLRECORDS = [];
 			var Airtable = require("airtable");
@@ -78,12 +71,10 @@
 
 			base("Cultural Texts")
 				.select({
-					// Selecting the first 3 records in Grid view:
-					// maxRecords: 3,
 					view: "Grid view",
 					filterByFormula: "{DisplayOnWeb} = TRUE()",
 					sort: [{ field: "Title", direction: "asc" }],
-					fields: ["Title", "Content", "Genres", "Medium", "Country", "Year", "Principles (Web)", "By (Web)", "Design Recommendations (Web)", "Links"],
+					fields: ["Title", "Content", "Genres", "Medium", "Country", "Year", "Principles (Web)", "By (Web)", "Design Recommendations (Web)", "Links", "Image"],
 				})
 				.eachPage(
 					function page(records, fetchNextPage) {
@@ -91,9 +82,7 @@
 
 						records.forEach(function (record) {
 							let mything = record.fields;
-							// console.log(mything);
 							ALLRECORDS = ALLRECORDS.concat(mything);
-							// console.log("Retrieved", record.get("Title"));
 						});
 
 						// To fetch the next page of records, call `fetchNextPage`.
@@ -106,20 +95,17 @@
 							console.error(err);
 							return;
 						} else {
-							// console.log(ALLRECORDS);
 							build_list(ALLRECORDS);
 						}
 					}
 				);
+
+			// Generate output.
 			// https://listjs.com/api/
 			function build_list(recs) {
 				var converter = new showdown.Converter();
 
 				recs.forEach(function (rec) {
-					// console.log("rec");
-					// console.log(rec["sadfg"]);
-					// implode texts
-					// implode p
 					let allb = "";
 					if (typeof rec["By (Web)"] !== "undefined") {
 						rec["By (Web)"].forEach(function (b) {
@@ -153,7 +139,10 @@
 							}
 						});
 					}
-					console.log(all_links);
+					let photo = "";
+					if (typeof rec["Image"] !== "undefined") {
+						photo = '<img src="' + rec["Image"][0]["thumbnails"]["large"]["url"] + '" alt="Cover for ' + rec["Title"].replaceAll(" ", "_") + '">';
+					}
 
 					let g = rec["Genres"] || "n/a";
 					let m = rec["Medium"] || "n/a";
@@ -163,67 +152,55 @@
 						`<article class="callout" id="` +
 						rec["Title"].replaceAll(" ", "_") +
 						`">
-							<h2>` +
+							<div class="grid-x grid-padding-x grid-padding-y">
+								<div class="large-3 medium-4 small-4 cell text-cover-image">` +
+						photo +
+						`</div>
+							<div class="large-9 medium-8 small-8 cell">
+								<h2>` +
 						rec["Title"] +
 						`</h2>
-							<p>` +
+								<p>` +
 						allb +
 						`</p>
-							<p class="all_links">` +
+								<p class="all_links">` +
 						all_links +
 						`</p>
-							<div class="grid-x grid-padding-x">
-								<div class="small-3 cell"><p>Genre: ` +
+								<p class="taglist">Genre: <span>` +
 						g +
-						`</p></div>
-								<div class="small-3 cell"><p>Medium: ` +
+						`</span></p>
+								<p class="taglist">Medium: <span>` +
 						m +
-						`</p></div>
-								<div class="small-3 cell"><p>Country: ` +
+						`</span></p>
+								<p class="taglist">Country: <span>` +
 						c +
-						`</p></div>
-								<div class="small-3 cell"><p>Year: ` +
+						`</span></p>
+								<p class="taglist">Year: <span>` +
 						y +
-						`</p></div>
-							</div>
+						`</span></p>
+								<p class="taglist"><strong>Principles:</strong> ` +
+						allp +
+						`</p>
+								<p class="taglist"><strong>Design Recommendations:</strong> ` +
+						alld +
+						`</p>
 								<details>
 									<summary><strong>Details...</strong></summary>
 									<div class="indent">
-									<p class="list"><strong>Principles:</strong> ` +
-						allp +
-						`</p>
-									<p class="list"><strong>Design Recommendations:</strong> ` +
-						alld +
-						`</p>
-									<div class="Content">` +
+										<div class="Content">` +
 						converter.makeHtml(rec["Content"]) +
 						`</div>
-										</div>
-							</details>
+									</div>
+								</details>
+							</div>
 						</article>`;
 					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
 				});
-				// scroll to text
-				var hash = window.location.hash.substring(1);
-				// console.log(hash);
-				if (hash) {
-					var jump = document.getElementById(window.location.hash.substring(1)).offsetTop; //Getting Y of target element
-					document.getElementById(window.location.hash.substring(1)).scrollIntoView({
-						behavior: "smooth",
-					});
-				}
+				scrollToAnchor();
 			}
 		</script>
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9PGKGEL1G"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-J9PGKGEL1G");
-		</script>
+		<script src="js/gtag.js"></script>
 	</body>
 </html>

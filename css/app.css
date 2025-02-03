@@ -12,9 +12,6 @@ html {
 img.logo {
 	max-width: 50px;
 }
-img {
-	/* max-height: 75vh; */
-}
 figure.video,
 video {
 	max-width: 100%;
@@ -61,6 +58,15 @@ h5,
 h6 {
 	font-family: "Major Mono Display", Courier, monospace;
 }
+h2 {
+	margin-top: 4rem;
+}
+.callout h2 {
+	margin-top: 0;
+}
+hr {
+	margin: 4rem auto;
+}
 #airtable-list ul {
 	list-style: none;
 	margin: 0;
@@ -70,20 +76,22 @@ h6 {
 	border: double 3px;
 	background-color: transparent;
 }
+.text-cover-image img {
+	width: 100%;
+}
 a {
 	cursor: pointer;
 }
-/* .footnotes {
-	font-size: 80%;
-} */
-details .indent {
-	margin-left: 0.9rem;
+a:hover,
+a:focus {
+	color: #64f434;
 }
-.list span {
+.taglist span {
 	background-color: rgba(255, 255, 255, 0.125);
-	padding: 2px 6px;
+	padding: 0 6px;
 	margin-right: 5px;
-	white-space: nowrap;
+	display: inline-block;
+	margin: 1px;
 }
 @media screen and (max-width: 39.9375em) {
 	.menu {
@@ -95,4 +103,13 @@ a[rel="home"] {
 }
 .all_links a {
 	display: block;
+}
+summary {
+	background-color: rgba(255, 255, 255, 0.125);
+	padding: 3px 12px;
+	margin-bottom: 1rem;
+}
+summary:hover {
+	color: #64f434;
+	cursor: pointer;
 }

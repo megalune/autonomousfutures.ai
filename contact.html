@@ -95,6 +95,7 @@
 		<script src="js/app.js"></script>
 		<script>
 			get_page_from_airtable("recL0az9cFyXDzvSf");
+
 			// API: https://airtable.com/developers/web/api/introduction
 			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
 			var fetch_set = [];
@@ -103,7 +104,6 @@
 
 			base("Profiles")
 				.select({
-					// maxRecords: 3,
 					view: "Grid view",
 					filterByFormula: "{DisplayOnWeb} = TRUE()",
 					sort: [{ field: "Name", direction: "asc" }],
@@ -112,7 +112,6 @@
 				.eachPage(
 					function page(records, fetchNextPage) {
 						// This function (`page`) will get called for each page of records.
-
 						records.forEach(function (record) {
 							let the_fields = record.fields;
 							fetch_set = fetch_set.concat(the_fields);
@@ -132,44 +131,37 @@
 						}
 					}
 				);
+
+			// Generate output.
 			function build_list(profiles) {
 				var converter = new showdown.Converter();
 
 				profiles.forEach(function (profile) {
-					console.log("profiles");
-					console.log(profile);
 					let photo = "";
 					if (typeof profile["Photo"] !== "undefined") {
 						photo = '<img src="' + profile["Photo"][0]["thumbnails"]["large"]["url"] + '" alt="">';
 					}
 					let output =
-						`<section class="callout"><div class="grid-x grid-padding-x grid-padding-y align-middle">
-			<div class="large-8 medium-8 small-8 cell">
-				<h5 class="Name">` +
+						`<section class="callout">
+							<div class="grid-x grid-padding-x grid-padding-y align-middle">
+<div class="large-8 medium-8 small-8 cell">
+	<h5 class="Name">` +
 						profile.Name +
 						`</h5>
-											<div class="Content">` +
+								<div class="Content">` +
 						converter.makeHtml(profile.Content) +
 						`</div>
-			</div>
-			<div class="large-4 medium-4 small-4 cell">` +
+</div>
+<div class="large-4 medium-4 small-4 cell">` +
 						photo +
 						`</div></div>
-								</section>`;
+					</section>`;
 					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
 				});
 			}
 		</script>
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9PGKGEL1G"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-J9PGKGEL1G");
-		</script>
+		<script src="js/gtag.js"></script>
 	</body>
 </html>

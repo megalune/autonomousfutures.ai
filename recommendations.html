@@ -61,6 +61,7 @@
 		<script src="js/app.js"></script>
 		<script>
 			get_page_from_airtable("rec8yFv14pW16qrLW");
+
 			// API: https://airtable.com/developers/web/api/introduction
 			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
 			var fetch_set = [];
@@ -69,7 +70,6 @@
 
 			base("Design Recommendations")
 				.select({
-					// maxRecords: 3,
 					view: "Grid view",
 					filterByFormula: "{DisplayOnWeb} = TRUE()",
 					sort: [{ field: "Title", direction: "asc" }],
@@ -94,16 +94,16 @@
 							console.error(err);
 							return;
 						} else {
-							console.log(fetch_set);
 							build_list(fetch_set);
 						}
 					}
 				);
+
+			// Generate output.
 			function build_list(recs) {
 				var converter = new showdown.Converter();
 
 				recs.forEach(function (rec) {
-					// console.log("rec");
 					let allp = "";
 					if (typeof rec["Principles (Web)"] !== "undefined") {
 						rec["Principles (Web)"].forEach(function (p) {
@@ -143,25 +143,11 @@
 						</article>`;
 					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
 				});
-				// scroll to text
-				var hash = window.location.hash.substring(1);
-				console.log(hash);
-				var jump = document.getElementById(window.location.hash.substring(1)).offsetTop; //Getting Y of target element
-				document.getElementById(window.location.hash.substring(1)).scrollIntoView({
-					behavior: "smooth",
-				});
+				scrollToAnchor();
 			}
 		</script>
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9PGKGEL1G"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-J9PGKGEL1G");
-		</script>
+		<script src="js/gtag.js"></script>
 	</body>
 </html>

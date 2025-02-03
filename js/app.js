@@ -6,17 +6,30 @@ function get_page_from_airtable( recID ){
 
 	base("Pages").find(recID, function (err, record) {
 		if (err) {
-			console.error(err);
+			// console.error(err);
 			return;
 		}
-		// console.log("Retrieved", record.id);
-		// console.log(record);
-		// console.log(record.fields.Content);
-		//
+
 		var converter = new showdown.Converter();
 		var html = converter.makeHtml(record.fields.Content);
-		// console.log(html);
+
 		document.getElementById("airtable_content").innerHTML = html;
 		document.getElementById("airtable_title").innerHTML = record.fields.Title;
 	});
+}
+
+// scroll to text
+function scrollToAnchor(){
+	var hash = window.location.hash.substring(1);
+	if (hash && document.getElementById(hash)) {
+		let target = document.getElementById(hash);
+		window.scrollTo({
+			top: target.offsetTop, // Scroll to Y of target element
+			left: 0,
+			behavior: 'smooth' // Add smooth scrolling animation
+		});
+		if ( target.nodeName === "DETAILS" ){
+			target.open = true;
+		}
+	}
 }

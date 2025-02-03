@@ -61,6 +61,7 @@
 		<script src="js/app.js"></script>
 		<script>
 			get_page_from_airtable("recF3nU9M1d0583os");
+
 			// API: https://airtable.com/developers/web/api/introduction
 			// Records: https://airtable.com/appBKn1E7gk7Kakkj/api/docs#javascript/table:principles:list
 			var fetch_set = [];
@@ -69,10 +70,7 @@
 
 			base("Principles")
 				.select({
-					// maxRecords: 3,
 					view: "Grid view",
-					// filterByFormula: "{DisplayOnWeb} = TRUE()",
-					// sort: [{ field: "Title", direction: "asc" }],
 					fields: ["Title", "Content", "OVERARCHING"],
 				})
 				.eachPage(
@@ -81,7 +79,6 @@
 
 						records.forEach(function (record) {
 							let the_fields = record.fields;
-							// console.log(the_fields);
 							fetch_set = fetch_set.concat(the_fields);
 						});
 
@@ -95,19 +92,18 @@
 							console.error(err);
 							return;
 						} else {
-							console.log(fetch_set);
 							build_list(fetch_set);
 						}
 					}
 				);
+
+			// Generate output.
 			function build_list(recs) {
 				var converter = new showdown.Converter();
 
 				recs.forEach(function (rec) {
 					let output = "";
-					// console.log(rec);
 					if (typeof rec["OVERARCHING"] !== "undefined") {
-						// console.log(rec["OVERARCHING"]);
 						output =
 							`<hr><h2 id="` +
 							rec["Title"].replaceAll(" ", "_") +
@@ -118,7 +114,6 @@
 							converter.makeHtml(rec["Content"]) +
 							`</div>`;
 					} else {
-						// console.log("sadf");
 						output =
 							`<details id="` +
 							rec["Title"].replaceAll(" ", "_") +
@@ -131,30 +126,13 @@
 							`</div>
 						</details>`;
 					}
-					console.log(output);
-					// let output = `<details>`;
 					document.getElementById("airtable_list").insertAdjacentHTML("beforeend", output);
 				});
-				// scroll to text
-				var hash = window.location.hash.substring(1);
-				console.log(hash);
-				var jump = document.getElementById(window.location.hash.substring(1)).offsetTop; //Getting Y of target element
-				document.getElementById(window.location.hash.substring(1)).open = true;
-				document.getElementById(window.location.hash.substring(1)).scrollIntoView({
-					behavior: "smooth",
-				});
+				scrollToAnchor();
 			}
 		</script>
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9PGKGEL1G"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-J9PGKGEL1G");
-		</script>
+		<script src="js/gtag.js"></script>
 	</body>
 </html>
